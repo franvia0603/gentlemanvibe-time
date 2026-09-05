@@ -13,6 +13,10 @@
   --gv-amber: #e8a857;
   --gv-amber-glow: #f5c98a;
 
+  /* 뽀모도로 다이얼 세그먼트 전용 레드/오렌지 (spec 5.1 수정본) */
+  --gv-timer-red: #e8452f;
+  --gv-timer-red-glow: #f58a6e;
+
   /* 브랜드 헤더 전용 웜 오프화이트 (spec 3.1) */
   --gv-brand-offwhite: #f5f1e8;
 

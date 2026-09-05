@@ -5,12 +5,6 @@ import PomodoroDial from "@/components/PomodoroDial";
 import { usePomodoroTicker } from "@/hooks/usePomodoroTicker";
 import { usePomodoroStore } from "@/store/usePomodoroStore";
 
-function formatRemaining(totalSeconds: number) {
-  const mm = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
-  const ss = String(totalSeconds % 60).padStart(2, "0");
-  return `${mm}:${ss}`;
-}
-
 type MinuteStepperProps = {
   label: string;
   minutes: number;
@@ -33,19 +27,30 @@ function MinuteStepper({
         type="button"
         disabled={disabled}
         onClick={() => onChange(minutes - 1)}
-        className="h-7 w-7 rounded-full border border-gv-titanium/30 text-gv-titanium transition-colors hover:border-gv-amber hover:text-gv-amber disabled:cursor-not-allowed disabled:opacity-30"
+        className="h-7 w-7 rounded-full border border-gv-titanium/30 text-gv-titanium transition-colors hover:border-gv-timer-red hover:text-gv-timer-red disabled:cursor-not-allowed disabled:opacity-30"
         aria-label={`${label} 시간 줄이기`}
       >
         −
       </button>
-      <span className="w-10 text-center text-sm tabular-nums text-gv-beige">
-        {minutes}분
-      </span>
+      <input
+        type="number"
+        min={1}
+        max={90}
+        value={minutes}
+        disabled={disabled}
+        onChange={(event) => {
+          const parsed = Number(event.target.value);
+          if (!Number.isNaN(parsed)) onChange(parsed);
+        }}
+        aria-label={`${label} 시간(분) 직접 입력`}
+        className="w-12 rounded border border-gv-titanium/20 bg-transparent text-center text-sm tabular-nums text-gv-beige [appearance:textfield] focus:border-gv-timer-red focus:outline-none disabled:opacity-30 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+      />
+      <span className="text-xs font-light text-gv-titanium">분</span>
       <button
         type="button"
         disabled={disabled}
         onClick={() => onChange(minutes + 1)}
-        className="h-7 w-7 rounded-full border border-gv-titanium/30 text-gv-titanium transition-colors hover:border-gv-amber hover:text-gv-amber disabled:cursor-not-allowed disabled:opacity-30"
+        className="h-7 w-7 rounded-full border border-gv-titanium/30 text-gv-titanium transition-colors hover:border-gv-timer-red hover:text-gv-timer-red disabled:cursor-not-allowed disabled:opacity-30"
         aria-label={`${label} 시간 늘리기`}
       >
         +
@@ -73,9 +78,8 @@ export default function PomodoroTimer() {
     usePomodoroStore.persist.rehydrate();
   }, []);
 
-  const totalDuration = (mode === "focus" ? focusMinutes : breakMinutes) * 60;
-  const progress =
-    totalDuration > 0 ? 1 - remainingSeconds / totalDuration : 0;
+  const totalMinutes = mode === "focus" ? focusMinutes : breakMinutes;
+  const setActiveMinutes = mode === "focus" ? setFocusMinutes : setBreakMinutes;
 
   return (
     <div className="flex flex-col items-center gap-8">
@@ -85,8 +89,10 @@ export default function PomodoroTimer() {
 
       <div className="aspect-square w-full max-w-[380px]">
         <PomodoroDial
-          progress={progress}
-          remainingLabel={formatRemaining(remainingSeconds)}
+          totalMinutes={totalMinutes}
+          remainingSeconds={remainingSeconds}
+          disabled={isRunning}
+          onSelectMinutes={setActiveMinutes}
         />
       </div>
 
@@ -94,7 +100,7 @@ export default function PomodoroTimer() {
         <button
           type="button"
           onClick={isRunning ? pause : start}
-          className="rounded-full border border-gv-amber/60 px-8 py-2 text-sm font-light tracking-widest text-gv-amber transition-colors hover:bg-gv-amber/10"
+          className="rounded-full border border-gv-timer-red/60 px-8 py-2 text-sm font-light tracking-widest text-gv-timer-red transition-colors hover:bg-gv-timer-red/10"
         >
           {isRunning ? "일시정지" : "시작"}
         </button>

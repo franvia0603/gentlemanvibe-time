@@ -1,4 +1,7 @@
+"use client";
+
 import { Bebas_Neue } from "next/font/google";
+import type { MouseEvent } from "react";
 
 const bebasNeue = Bebas_Neue({ subsets: ["latin"], weight: "400" });
 
@@ -9,6 +12,7 @@ const SEGMENT_OUTER_R = 172;
 const SEGMENT_INNER_R = 122;
 const SEGMENT_WIDTH = 9;
 const SEGMENT_COUNT = 60;
+const DIAL_MAX_MINUTES = 60;
 
 const TICK_OUTER_R = 190;
 const TICK_MAJOR_INNER_R = 176;
@@ -18,10 +22,14 @@ const LABEL_R = 210;
 const GLOW_TAIL = 3;
 
 type PomodoroDialProps = {
-  /** 0~1, 경과 비율 (더미 데이터 — 실제 카운트다운 로직은 다음 단계에서 연결) */
-  progress?: number;
-  /** 원 중심에 표시할 남은 시간 텍스트, 예: "11:55" */
-  remainingLabel?: string;
+  /** 다이얼에 표시할 총 설정 시간(분). 다이얼은 최대 60분(한 바퀴)까지 표현한다. */
+  totalMinutes: number;
+  /** 남은 시간(초) — 세그먼트 채움과 중앙 표시에 사용 */
+  remainingSeconds: number;
+  /** 다이얼 둘레를 클릭/드래그해 시간을 설정할 때 호출 (1~60분) */
+  onSelectMinutes?: (minutes: number) => void;
+  /** true면 클릭으로 시간 설정 불가 (타이머 실행 중) */
+  disabled?: boolean;
 };
 
 // 삼각함수 결과는 서버(Node.js)와 브라우저의 부동소수점 마지막 자리가
@@ -43,29 +51,75 @@ function angleForMinute(minute: number) {
   return round((minute / SEGMENT_COUNT) * 360 - 90);
 }
 
+function formatRemaining(totalSeconds: number) {
+  const clamped = Math.max(0, totalSeconds);
+  const mm = String(Math.floor(clamped / 60)).padStart(2, "0");
+  const ss = String(Math.floor(clamped % 60)).padStart(2, "0");
+  return `${mm}:${ss}`;
+}
+
 export default function PomodoroDial({
-  progress = 0.5,
-  remainingLabel = "11:55",
+  totalMinutes,
+  remainingSeconds,
+  onSelectMinutes,
+  disabled = false,
 }: PomodoroDialProps) {
-  const filledCount = Math.round(SEGMENT_COUNT * progress);
+  const totalCount = Math.min(
+    DIAL_MAX_MINUTES,
+    Math.max(1, Math.round(totalMinutes)),
+  );
+  const remainingCount = Math.min(
+    totalCount,
+    Math.max(0, Math.round(remainingSeconds / 60)),
+  );
+  // 남은 시간만큼 "뒤쪽"(설정 구간의 끝)이 채워져 있고, 경과한 앞쪽부터 비워진다.
+  const elapsedCount = totalCount - remainingCount;
 
   const majorTicks = Array.from({ length: 12 }, (_, i) => i * 5);
   const minorTicks = Array.from({ length: SEGMENT_COUNT }, (_, i) => i).filter(
     (minute) => minute % 5 !== 0,
   );
 
+  function handleDialClick(event: MouseEvent<SVGSVGElement>) {
+    if (disabled || !onSelectMinutes) return;
+
+    const svg = event.currentTarget;
+    const point = svg.createSVGPoint();
+    point.x = event.clientX;
+    point.y = event.clientY;
+    const ctm = svg.getScreenCTM();
+    if (!ctm) return;
+
+    const svgPoint = point.matrixTransform(ctm.inverse());
+    const dx = svgPoint.x - CENTER;
+    const dy = svgPoint.y - CENTER;
+
+    let angleDeg = (Math.atan2(dy, dx) * 180) / Math.PI + 90;
+    if (angleDeg < 0) angleDeg += 360;
+
+    const minutes = Math.round((angleDeg / 360) * DIAL_MAX_MINUTES);
+    onSelectMinutes(minutes === 0 ? DIAL_MAX_MINUTES : minutes);
+  }
+
   return (
     <svg
       viewBox={`0 0 ${SIZE} ${SIZE}`}
-      role="img"
-      aria-label={`뽀모도로 타이머, 남은 시간 ${remainingLabel}`}
-      className="h-full w-full"
+      role={onSelectMinutes ? "slider" : "img"}
+      aria-label={`뽀모도로 타이머, 남은 시간 ${formatRemaining(remainingSeconds)}`}
+      aria-valuenow={onSelectMinutes ? totalCount : undefined}
+      aria-valuemin={onSelectMinutes ? 1 : undefined}
+      aria-valuemax={onSelectMinutes ? DIAL_MAX_MINUTES : undefined}
+      onClick={handleDialClick}
+      className={`h-full w-full ${
+        disabled ? "" : onSelectMinutes ? "cursor-pointer" : ""
+      }`}
     >
-      {/* 방사형 세그먼트 링 — 1분 단위 60칸, 절반 진행 더미 상태 */}
+      {/* 방사형 세그먼트 링 — 설정 시간만큼 꽉 찬 상태로 시작해 남은 시간만큼만 유지 */}
       {Array.from({ length: SEGMENT_COUNT }, (_, i) => {
         const angle = angleForMinute(i + 0.5);
-        const isFilled = i < filledCount;
-        const isLeadingEdge = isFilled && i >= filledCount - GLOW_TAIL;
+        const isInPlay = i < totalCount;
+        const isFilled = isInPlay && i >= elapsedCount;
+        const isLeadingEdge = isFilled && i < elapsedCount + GLOW_TAIL;
 
         return (
           <rect
@@ -79,13 +133,13 @@ export default function PomodoroDial({
             fill={
               isFilled
                 ? isLeadingEdge
-                  ? "var(--gv-amber-glow)"
-                  : "var(--gv-amber)"
+                  ? "var(--gv-timer-red-glow)"
+                  : "var(--gv-timer-red)"
                 : "var(--gv-charcoal)"
             }
             style={
               isLeadingEdge
-                ? { filter: "drop-shadow(0 0 6px var(--gv-amber-glow))" }
+                ? { filter: "drop-shadow(0 0 6px var(--gv-timer-red-glow))" }
                 : undefined
             }
           />
@@ -104,7 +158,7 @@ export default function PomodoroDial({
             y1={p1.y}
             x2={p2.x}
             y2={p2.y}
-            stroke="var(--gv-titanium)"
+            stroke="var(--gv-brand-offwhite)"
             strokeWidth={2}
             strokeLinecap="round"
           />
@@ -123,9 +177,9 @@ export default function PomodoroDial({
             y1={p1.y}
             x2={p2.x}
             y2={p2.y}
-            stroke="var(--gv-titanium)"
+            stroke="var(--gv-brand-offwhite)"
             strokeWidth={1}
-            strokeOpacity={0.4}
+            strokeOpacity={0.35}
             strokeLinecap="round"
           />
         );
@@ -144,7 +198,7 @@ export default function PomodoroDial({
             dominantBaseline="middle"
             fontSize={15}
             fontWeight={300}
-            fill="var(--gv-titanium)"
+            fill="var(--gv-brand-offwhite)"
             style={{ fontVariantNumeric: "tabular-nums" }}
           >
             {minute}
@@ -152,18 +206,18 @@ export default function PomodoroDial({
         );
       })}
 
-      {/* 중심 — 남은 시간 (매초 갱신되므로 글로우 없이 단색으로 가독성 확보) */}
+      {/* 중심 — 남은 시간 */}
       <text
         x={CENTER}
         y={CENTER}
         textAnchor="middle"
         dominantBaseline="middle"
         fontSize={80}
-        fill="var(--gv-amber)"
+        fill="var(--gv-brand-offwhite)"
         className={bebasNeue.className}
         style={{ fontVariantNumeric: "tabular-nums" }}
       >
-        {remainingLabel}
+        {formatRemaining(remainingSeconds)}
       </text>
     </svg>
   );

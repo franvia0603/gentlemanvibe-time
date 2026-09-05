@@ -21,6 +21,8 @@ const config: Config = {
           beige: "var(--gv-beige)",
           amber: "var(--gv-amber)",
           "amber-glow": "var(--gv-amber-glow)",
+          "timer-red": "var(--gv-timer-red)",
+          "timer-red-glow": "var(--gv-timer-red-glow)",
           "brand-offwhite": "var(--gv-brand-offwhite)",
         },
       },

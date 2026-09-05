@@ -76,7 +76,7 @@ export default function SettingsPanel() {
   }
 
   return (
-    <div className="fixed right-4 top-4 z-50">
+    <div className="fixed right-14 top-4 z-50">
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
