@@ -71,7 +71,7 @@ type CityCardProps = {
 function CityCard({ id, label, now, removable, onRemove }: CityCardProps) {
   const offsetLabel = now
     ? id === SEOUL_TIMEZONE
-      ? "기준 도시"
+      ? "현재 위치"
       : formatOffsetLabel(
           getUtcOffsetMinutes(now, id) - getUtcOffsetMinutes(now, SEOUL_TIMEZONE),
         )

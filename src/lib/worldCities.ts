@@ -41,7 +41,6 @@ export const SEOUL_TIMEZONE = "Asia/Seoul";
 
 export const DEFAULT_CITY_IDS = [
   "Asia/Seoul",
-  "Asia/Tokyo",
   "America/New_York",
   "Europe/London",
   "Europe/Paris",
