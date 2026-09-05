@@ -13,15 +13,27 @@ const TONE_HOVER_TEXT: Record<ButtonTone, string> = {
   "timer-red": "hover:text-gv-timer-red",
 };
 
+export type IconButtonSize = "sm" | "md";
+
+// className을 뒤에 이어붙여 크기를 덮어쓰면 Tailwind 유틸리티 우선순위가
+// 소스 작성 순서가 아니라 컴파일된 스타일시트 순서로 결정되어 신뢰할 수
+// 없다 — 크기별로 완전한 클래스 문자열을 미리 선언해 안전하게 분기한다.
+const SIZE_CLASSES: Record<IconButtonSize, string> = {
+  sm: "h-8 w-8",
+  md: "h-10 w-10",
+};
+
 export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   active?: boolean;
   tone?: ButtonTone;
+  size?: IconButtonSize;
 }
 
 /** Button과 동일한 시각 언어를 쓰는 원형 아이콘 전용 버튼 (톱니바퀴, 풀스크린, +/- 등) */
 export default function IconButton({
   active = false,
   tone = "amber",
+  size = "md",
   className = "",
   type = "button",
   ...props
@@ -29,9 +41,9 @@ export default function IconButton({
   return (
     <button
       type={type}
-      className={`flex h-10 w-10 items-center justify-center rounded-full border border-gv-titanium/25 bg-gv-charcoal/70 transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
-        active ? TONE_TEXT[tone] : "text-gv-beige"
-      } ${TONE_HOVER_TEXT[tone]} ${className}`}
+      className={`flex items-center justify-center rounded-full border border-gv-titanium/25 bg-gv-charcoal/70 transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+        SIZE_CLASSES[size]
+      } ${active ? TONE_TEXT[tone] : "text-gv-beige"} ${TONE_HOVER_TEXT[tone]} ${className}`}
       {...props}
     />
   );

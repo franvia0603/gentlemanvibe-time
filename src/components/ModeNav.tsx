@@ -54,10 +54,31 @@ function StopwatchIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+function TimerIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.5}
+      {...props}
+    >
+      <circle cx="12" cy="12" r="8.25" />
+      <path d="M12 12V4.75" strokeLinecap="round" />
+      <path
+        d="M12 12L17 15.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 const MODES = [
   { href: "/", label: "Clock", Icon: ClockIcon },
   { href: "/pomodoro", label: "Focus", Icon: FocusIcon },
   { href: "/stopwatch", label: "Stopwatch", Icon: StopwatchIcon },
+  { href: "/timer", label: "Timer", Icon: TimerIcon },
 ] as const;
 
 export default function ModeNav() {

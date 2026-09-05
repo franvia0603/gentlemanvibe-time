@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import PomodoroDial from "@/components/PomodoroDial";
+import SegmentDial from "@/components/SegmentDial";
 import FullscreenToggle from "@/components/FullscreenToggle";
 import Button from "@/components/ui/Button";
 import IconButton from "@/components/ui/IconButton";
@@ -91,11 +91,13 @@ export default function PomodoroTimer() {
       </span>
 
       <div className="aspect-square w-full max-w-[380px]">
-        <PomodoroDial
+        <SegmentDial
           totalMinutes={totalMinutes}
           remainingSeconds={remainingSeconds}
           disabled={isRunning}
           onSelectMinutes={setActiveMinutes}
+          tone="timer-red"
+          label="뽀모도로 타이머"
         />
       </div>
 

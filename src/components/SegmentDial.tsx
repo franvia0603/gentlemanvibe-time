@@ -21,7 +21,20 @@ const LABEL_R = 210;
 
 const GLOW_TAIL = 3;
 
-type PomodoroDialProps = {
+export type SegmentDialTone = "timer-red" | "amber";
+
+const TONE_COLORS: Record<SegmentDialTone, { fill: string; glow: string }> = {
+  "timer-red": {
+    fill: "var(--gv-timer-red)",
+    glow: "var(--gv-timer-red-glow)",
+  },
+  amber: {
+    fill: "var(--gv-amber)",
+    glow: "var(--gv-amber-glow)",
+  },
+};
+
+type SegmentDialProps = {
   /** 다이얼에 표시할 총 설정 시간(분). 다이얼은 최대 60분(한 바퀴)까지 표현한다. */
   totalMinutes: number;
   /** 남은 시간(초) — 세그먼트 채움과 중앙 표시에 사용 */
@@ -30,6 +43,12 @@ type PomodoroDialProps = {
   onSelectMinutes?: (minutes: number) => void;
   /** true면 클릭으로 시간 설정 불가 (타이머 실행 중) */
   disabled?: boolean;
+  /** 세그먼트 강조 색 계열 — 뽀모도로는 timer-red, 범용 타이머는 amber */
+  tone?: SegmentDialTone;
+  /** 접근성 라벨에 쓸 기능명, 예: "뽀모도로 타이머" / "카운트다운 타이머" */
+  label?: string;
+  /** 지정하면 중앙 표시를 이 문자열로 대체 (예: 초과 경과 "+00:15") */
+  centerLabel?: string;
 };
 
 // 삼각함수 결과는 서버(Node.js)와 브라우저의 부동소수점 마지막 자리가
@@ -58,12 +77,17 @@ function formatRemaining(totalSeconds: number) {
   return `${mm}:${ss}`;
 }
 
-export default function PomodoroDial({
+export default function SegmentDial({
   totalMinutes,
   remainingSeconds,
   onSelectMinutes,
   disabled = false,
-}: PomodoroDialProps) {
+  tone = "timer-red",
+  label = "타이머",
+  centerLabel,
+}: SegmentDialProps) {
+  const colors = TONE_COLORS[tone];
+
   const totalCount = Math.min(
     DIAL_MAX_MINUTES,
     Math.max(1, Math.round(totalMinutes)),
@@ -79,6 +103,8 @@ export default function PomodoroDial({
   const minorTicks = Array.from({ length: SEGMENT_COUNT }, (_, i) => i).filter(
     (minute) => minute % 5 !== 0,
   );
+
+  const displayText = centerLabel ?? formatRemaining(remainingSeconds);
 
   function handleDialClick(event: MouseEvent<SVGSVGElement>) {
     if (disabled || !onSelectMinutes) return;
@@ -105,7 +131,7 @@ export default function PomodoroDial({
     <svg
       viewBox={`0 0 ${SIZE} ${SIZE}`}
       role={onSelectMinutes ? "slider" : "img"}
-      aria-label={`뽀모도로 타이머, 남은 시간 ${formatRemaining(remainingSeconds)}`}
+      aria-label={`${label}, 남은 시간 ${displayText}`}
       aria-valuenow={onSelectMinutes ? totalCount : undefined}
       aria-valuemin={onSelectMinutes ? 1 : undefined}
       aria-valuemax={onSelectMinutes ? DIAL_MAX_MINUTES : undefined}
@@ -133,13 +159,13 @@ export default function PomodoroDial({
             fill={
               isFilled
                 ? isLeadingEdge
-                  ? "var(--gv-timer-red-glow)"
-                  : "var(--gv-timer-red)"
+                  ? colors.glow
+                  : colors.fill
                 : "var(--gv-charcoal)"
             }
             style={
               isLeadingEdge
-                ? { filter: "drop-shadow(0 0 6px var(--gv-timer-red-glow))" }
+                ? { filter: `drop-shadow(0 0 6px ${colors.glow})` }
                 : undefined
             }
           />
@@ -206,18 +232,18 @@ export default function PomodoroDial({
         );
       })}
 
-      {/* 중심 — 남은 시간 */}
+      {/* 중심 — 남은 시간 (또는 centerLabel로 대체) */}
       <text
         x={CENTER}
         y={CENTER}
         textAnchor="middle"
         dominantBaseline="middle"
-        fontSize={80}
+        fontSize={centerLabel && centerLabel.length > 6 ? 60 : 80}
         fill="var(--gv-brand-offwhite)"
         className={bebasNeue.className}
         style={{ fontVariantNumeric: "tabular-nums" }}
       >
-        {formatRemaining(remainingSeconds)}
+        {displayText}
       </text>
     </svg>
   );
