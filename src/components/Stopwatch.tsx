@@ -3,7 +3,6 @@
 import { Bebas_Neue } from "next/font/google";
 import { formatStopwatch, useStopwatch } from "@/hooks/useStopwatch";
 import Button from "@/components/ui/Button";
-import FullscreenToggle from "@/components/FullscreenToggle";
 
 const bebasNeue = Bebas_Neue({ subsets: ["latin"], weight: "400" });
 
@@ -36,7 +35,6 @@ export default function Stopwatch() {
         <Button onClick={reset} disabled={isRunning}>
           리셋
         </Button>
-        <FullscreenToggle tone="amber" />
       </div>
 
       {laps.length > 0 && (

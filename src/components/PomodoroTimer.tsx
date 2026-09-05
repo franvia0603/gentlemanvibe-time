@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import SegmentDial from "@/components/SegmentDial";
-import FullscreenToggle from "@/components/FullscreenToggle";
 import Button from "@/components/ui/Button";
 import IconButton from "@/components/ui/IconButton";
 import { usePomodoroTicker } from "@/hooks/usePomodoroTicker";
@@ -106,7 +105,6 @@ export default function PomodoroTimer() {
         <Button tone="timer-red" onClick={reset}>
           리셋
         </Button>
-        <FullscreenToggle tone="timer-red" />
       </div>
 
       <div className="flex flex-col items-center gap-3 pt-2">

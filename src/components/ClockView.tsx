@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import DigitalClock from "@/components/DigitalClock";
 import AnalogClock from "@/components/AnalogClock";
-import FullscreenToggle from "@/components/FullscreenToggle";
 import Button from "@/components/ui/Button";
 import { useClockSettingsStore } from "@/store/useClockSettingsStore";
 
@@ -54,7 +53,6 @@ export default function ClockView() {
         >
           {clockMode === "digital" ? "Analog로 전환" : "Digital로 전환"}
         </Button>
-        <FullscreenToggle tone="amber" />
       </div>
     </div>
   );

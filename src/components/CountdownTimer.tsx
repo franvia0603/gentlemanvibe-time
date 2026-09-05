@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import SegmentDial from "@/components/SegmentDial";
-import FullscreenToggle from "@/components/FullscreenToggle";
 import Button from "@/components/ui/Button";
 import IconButton from "@/components/ui/IconButton";
 import { useCountdownTicker } from "@/hooks/useCountdownTicker";
@@ -326,9 +325,6 @@ export default function CountdownTimer() {
       </div>
 
       <Button onClick={playCompletionTone}>종료음 테스트</Button>
-
-      {/* 7. 풀스크린 토글 (다른 페이지와 동일한 위치 패턴) */}
-      <FullscreenToggle tone="amber" />
     </div>
   );
 }

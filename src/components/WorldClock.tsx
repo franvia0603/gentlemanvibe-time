@@ -7,7 +7,6 @@ import { useWorldClockStore } from "@/store/useWorldClockStore";
 import { CITY_CATALOG, SEOUL_TIMEZONE, getCityInfo } from "@/lib/worldCities";
 import Button from "@/components/ui/Button";
 import IconButton from "@/components/ui/IconButton";
-import FullscreenToggle from "@/components/FullscreenToggle";
 
 const bebasNeue = Bebas_Neue({ subsets: ["latin"], weight: "400" });
 
@@ -166,7 +165,6 @@ export default function WorldClock() {
             </Button>
           </>
         )}
-        <FullscreenToggle tone="amber" />
       </div>
     </div>
   );
