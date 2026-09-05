@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import PomodoroDial from "@/components/PomodoroDial";
 import FullscreenToggle from "@/components/FullscreenToggle";
+import Button from "@/components/ui/Button";
+import IconButton from "@/components/ui/IconButton";
 import { usePomodoroTicker } from "@/hooks/usePomodoroTicker";
 import { usePomodoroStore } from "@/store/usePomodoroStore";
 
@@ -21,18 +23,18 @@ function MinuteStepper({
 }: MinuteStepperProps) {
   return (
     <div className="flex items-center gap-3">
-      <span className="w-10 text-xs font-light tracking-wide text-gv-titanium">
+      <span className="w-12 text-sm font-normal tracking-wide text-gv-beige">
         {label}
       </span>
-      <button
-        type="button"
+      <IconButton
+        tone="timer-red"
         disabled={disabled}
         onClick={() => onChange(minutes - 1)}
-        className="h-7 w-7 rounded-full border border-gv-titanium/30 text-gv-titanium transition-colors hover:border-gv-timer-red hover:text-gv-timer-red disabled:cursor-not-allowed disabled:opacity-30"
         aria-label={`${label} 시간 줄이기`}
+        className="h-9 w-9"
       >
-        −
-      </button>
+        <span className="text-lg leading-none">−</span>
+      </IconButton>
       <input
         type="number"
         min={1}
@@ -44,18 +46,18 @@ function MinuteStepper({
           if (!Number.isNaN(parsed)) onChange(parsed);
         }}
         aria-label={`${label} 시간(분) 직접 입력`}
-        className="w-12 rounded border border-gv-titanium/20 bg-transparent text-center text-sm tabular-nums text-gv-beige [appearance:textfield] focus:border-gv-timer-red focus:outline-none disabled:opacity-30 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+        className="w-14 rounded-md border border-gv-titanium/25 bg-gv-charcoal/70 py-1 text-center text-base tabular-nums text-gv-beige [appearance:textfield] focus:text-gv-timer-red focus:outline-none disabled:opacity-40 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
       />
-      <span className="text-xs font-light text-gv-titanium">분</span>
-      <button
-        type="button"
+      <span className="text-sm font-normal text-gv-beige">분</span>
+      <IconButton
+        tone="timer-red"
         disabled={disabled}
         onClick={() => onChange(minutes + 1)}
-        className="h-7 w-7 rounded-full border border-gv-titanium/30 text-gv-titanium transition-colors hover:border-gv-timer-red hover:text-gv-timer-red disabled:cursor-not-allowed disabled:opacity-30"
         aria-label={`${label} 시간 늘리기`}
+        className="h-9 w-9"
       >
-        +
-      </button>
+        <span className="text-lg leading-none">+</span>
+      </IconButton>
     </div>
   );
 }
@@ -84,7 +86,7 @@ export default function PomodoroTimer() {
 
   return (
     <div className="flex flex-col items-center gap-8">
-      <span className="text-xs font-light uppercase tracking-[0.35em] text-gv-titanium">
+      <span className="text-sm font-normal uppercase tracking-[0.35em] text-gv-titanium">
         {mode === "focus" ? "Focus" : "Break"}
       </span>
 
@@ -98,21 +100,13 @@ export default function PomodoroTimer() {
       </div>
 
       <div className="flex items-center gap-4">
-        <button
-          type="button"
-          onClick={isRunning ? pause : start}
-          className="rounded-full border border-gv-timer-red/60 px-8 py-2 text-sm font-light tracking-widest text-gv-timer-red transition-colors hover:bg-gv-timer-red/10"
-        >
+        <Button tone="timer-red" active onClick={isRunning ? pause : start}>
           {isRunning ? "일시정지" : "시작"}
-        </button>
-        <button
-          type="button"
-          onClick={reset}
-          className="rounded-full border border-gv-titanium/30 px-8 py-2 text-sm font-light tracking-widest text-gv-titanium transition-colors hover:border-gv-titanium hover:text-gv-beige"
-        >
+        </Button>
+        <Button tone="timer-red" onClick={reset}>
           리셋
-        </button>
-        <FullscreenToggle />
+        </Button>
+        <FullscreenToggle tone="timer-red" />
       </div>
 
       <div className="flex flex-col items-center gap-3 pt-2">

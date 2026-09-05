@@ -61,13 +61,13 @@ export default function ModeNav() {
             key={href}
             href={href}
             aria-current={isActive ? "page" : undefined}
-            className={`flex flex-col items-center gap-1 text-[10px] font-light tracking-wide transition-colors ${
+            className={`flex flex-col items-center gap-1 text-sm font-normal tracking-wide transition-colors ${
               isActive
                 ? "text-gv-amber"
-                : "text-gv-titanium/70 hover:text-gv-titanium"
+                : "text-gv-titanium hover:text-gv-beige"
             }`}
           >
-            <Icon className="h-4 w-4" />
+            <Icon className="h-5 w-5" />
             {label}
           </Link>
         );

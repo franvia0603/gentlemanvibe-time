@@ -2,6 +2,8 @@
 
 import type { SVGProps } from "react";
 import { useIsFullscreen } from "@/hooks/useIsFullscreen";
+import IconButton from "@/components/ui/IconButton";
+import type { ButtonTone } from "@/components/ui/Button";
 
 interface FullscreenCapableElement extends HTMLElement {
   webkitRequestFullscreen?: () => Promise<void> | void;
@@ -65,27 +67,33 @@ function CompressIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+type FullscreenToggleProps = {
+  /** 강조 색 계열 — 배치된 화면 문맥에 맞춰 전달 (기본 gv-amber) */
+  tone?: ButtonTone;
+};
+
 /**
  * 시계/다이얼 옆에 각 화면마다 인라인으로 배치하는 전용 풀스크린 토글.
  * FullscreenHint 하단 문구와 달리, 풀스크린 상태에서도 숨기지 않는다 —
  * 이 버튼이 유일하게 풀스크린을 "끌" 수 있는 화면 UI이기 때문이다.
  */
-export default function FullscreenToggle() {
+export default function FullscreenToggle({
+  tone = "amber",
+}: FullscreenToggleProps) {
   const isFullscreen = useIsFullscreen();
 
   return (
-    <button
-      type="button"
+    <IconButton
+      tone={tone}
       onClick={() => (isFullscreen ? exitFullscreen() : enterFullscreen())}
       aria-label={isFullscreen ? "전체화면 종료" : "전체화면 시작"}
       aria-pressed={isFullscreen}
-      className="flex h-9 w-9 items-center justify-center rounded-full border border-gv-titanium/30 text-gv-titanium transition-colors hover:border-gv-titanium hover:text-gv-beige"
     >
       {isFullscreen ? (
         <CompressIcon className="h-5 w-5" />
       ) : (
         <ExpandIcon className="h-5 w-5" />
       )}
-    </button>
+    </IconButton>
   );
 }

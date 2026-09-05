@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { SVGProps } from "react";
 import { useClockSettingsStore } from "@/store/useClockSettingsStore";
 import { useIsFullscreen } from "@/hooks/useIsFullscreen";
+import IconButton from "@/components/ui/IconButton";
 
 function GearIcon(props: SVGProps<SVGSVGElement>) {
   return (
@@ -36,7 +37,7 @@ function ToggleRow({ label, checked, onChange }: ToggleRowProps) {
       role="switch"
       aria-checked={checked}
       onClick={() => onChange(!checked)}
-      className="flex w-full items-center justify-between gap-4 py-1.5 text-left text-xs font-light text-gv-beige"
+      className="flex w-full items-center justify-between gap-4 py-2 text-left text-sm font-normal text-gv-beige"
     >
       <span>{label}</span>
       <span
@@ -77,18 +78,17 @@ export default function SettingsPanel() {
 
   return (
     <div className="fixed right-14 top-4 z-50">
-      <button
-        type="button"
+      <IconButton
         onClick={() => setOpen((value) => !value)}
         aria-label="클락 표시 설정"
         aria-expanded={open}
-        className="flex h-7 w-7 items-center justify-center rounded-full text-gv-titanium/60 transition-colors hover:text-gv-titanium"
+        active={open}
       >
-        <GearIcon className="h-4 w-4" />
-      </button>
+        <GearIcon className="h-5 w-5" />
+      </IconButton>
 
       {open && (
-        <div className="absolute right-0 top-9 w-48 rounded-lg border border-gv-titanium/20 bg-gv-charcoal/95 p-3 shadow-lg">
+        <div className="absolute right-0 top-11 w-56 rounded-lg border border-gv-titanium/20 bg-gv-charcoal/95 p-3 shadow-lg">
           <ToggleRow label="오전/오후 표시" checked={amPm} onChange={setAmPm} />
           <ToggleRow
             label="시간만 표시"
