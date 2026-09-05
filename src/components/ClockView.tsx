@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import DigitalClock from "@/components/DigitalClock";
 import AnalogClock from "@/components/AnalogClock";
+import FullscreenToggle from "@/components/FullscreenToggle";
 import { useClockSettingsStore } from "@/store/useClockSettingsStore";
 
 export default function ClockView() {
@@ -44,15 +45,18 @@ export default function ClockView() {
         </div>
       </div>
 
-      <button
-        type="button"
-        onClick={() =>
-          setClockMode(clockMode === "digital" ? "analog" : "digital")
-        }
-        className="rounded-full border border-gv-titanium/30 px-6 py-1.5 text-xs font-light tracking-widest text-gv-titanium transition-colors hover:border-gv-amber hover:text-gv-amber"
-      >
-        {clockMode === "digital" ? "Analog로 전환" : "Digital로 전환"}
-      </button>
+      <div className="flex items-center gap-3">
+        <button
+          type="button"
+          onClick={() =>
+            setClockMode(clockMode === "digital" ? "analog" : "digital")
+          }
+          className="rounded-full border border-gv-titanium/30 px-6 py-1.5 text-xs font-light tracking-widest text-gv-titanium transition-colors hover:border-gv-amber hover:text-gv-amber"
+        >
+          {clockMode === "digital" ? "Analog로 전환" : "Digital로 전환"}
+        </button>
+        <FullscreenToggle />
+      </div>
     </div>
   );
 }

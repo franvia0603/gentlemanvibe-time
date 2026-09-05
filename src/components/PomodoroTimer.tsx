@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import PomodoroDial from "@/components/PomodoroDial";
+import FullscreenToggle from "@/components/FullscreenToggle";
 import { usePomodoroTicker } from "@/hooks/usePomodoroTicker";
 import { usePomodoroStore } from "@/store/usePomodoroStore";
 
@@ -111,6 +112,7 @@ export default function PomodoroTimer() {
         >
           리셋
         </button>
+        <FullscreenToggle />
       </div>
 
       <div className="flex flex-col items-center gap-3 pt-2">
