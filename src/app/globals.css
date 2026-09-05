@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* GentlemanVibe Time — 톤온톤 다크 팔레트 (spec 5장) */
+  --gv-true-black: #000000;
+  --gv-matte-black: #0d0d0d;
+  --gv-charcoal: #1c1c1e;
+  --gv-titanium: #8e8e93;
+  --gv-forest: #3b5d46;
+  --gv-beige: #e8dcc8;
+  --gv-amber: #e8a857;
+  --gv-amber-glow: #f5c98a;
+
+  /* 브랜드 헤더 전용 웜 오프화이트 (spec 3.1) */
+  --gv-brand-offwhite: #f5f1e8;
+
+  --background: var(--gv-matte-black);
+  --foreground: var(--gv-beige);
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
