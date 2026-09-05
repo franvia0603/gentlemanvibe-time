@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import BrandHeader from "@/components/BrandHeader";
 import ModeNav from "@/components/ModeNav";
 import FullscreenToggle from "@/components/FullscreenToggle";
@@ -16,12 +17,40 @@ import { useIsFullscreen } from "@/hooks/useIsFullscreen";
  * 풀스크린 토글은 ModeNav 좌측에 단일하게 배치한다(spec 3.4). ModeNav는
  * 풀스크린 중 스스로 숨지만 토글은 계속 보여야 하므로, ModeNav가 사라진
  * 자리에서 토글만 남았을 때는 가운데로 재정렬한다.
+ *
+ * 헤더는 뷰포트 폭에 따라 ModeNav 탭이 한 줄/두 줄로 바뀌며 실제 높이가
+ * 달라진다. 본문이 고정 pt-* 값 하나로 이 가변 높이를 가정하면, 두 줄로
+ * 줄바꿈되는 구간에서 본문 최상단 요소가 헤더에 가려 잘리는 문제가
+ * 생긴다(spec 6). ResizeObserver로 헤더의 실제 렌더링 높이를 측정해
+ * `--gv-header-height` CSS 변수로 반영하면, PageShell/StaticPageShell이
+ * 이 값을 읽어 항상 정확한 안전 여백을 확보할 수 있다.
  */
 export default function SiteHeader() {
   const isFullscreen = useIsFullscreen();
+  const headerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+
+    const updateHeight = () => {
+      document.documentElement.style.setProperty(
+        "--gv-header-height",
+        `${el.getBoundingClientRect().height}px`,
+      );
+    };
+
+    updateHeight();
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div className="fixed inset-x-0 top-0 z-50 flex flex-col items-center gap-1 border-b border-gv-titanium/10 bg-gv-matte-black pb-3 pt-4">
+    <div
+      ref={headerRef}
+      className="fixed inset-x-0 top-0 z-50 flex flex-col items-center gap-1 border-b border-gv-titanium/10 bg-gv-matte-black pb-3 pt-4"
+    >
       <BrandHeader />
       {isFullscreen ? (
         <FullscreenToggle />
