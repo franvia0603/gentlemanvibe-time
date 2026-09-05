@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function PomodoroPage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gv-matte-black p-8">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-gv-matte-black px-8 pb-8 pt-24">
       <PomodoroTimer />
       <FullscreenHint featureName="뽀모도로 타이머" modeName="Focus" />
     </main>

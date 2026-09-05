@@ -1,0 +1,77 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import type { SVGProps } from "react";
+import { useIsFullscreen } from "@/hooks/useIsFullscreen";
+
+function ClockIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.5}
+      {...props}
+    >
+      <circle cx="12" cy="12" r="8.25" />
+      <path d="M12 7.5V12l3 2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function FocusIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.5}
+      {...props}
+    >
+      <circle cx="12" cy="12" r="8.25" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="12" cy="12" r="0.75" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+const MODES = [
+  { href: "/", label: "Clock", Icon: ClockIcon },
+  { href: "/pomodoro", label: "Focus", Icon: FocusIcon },
+] as const;
+
+export default function ModeNav() {
+  const pathname = usePathname();
+  const isFullscreen = useIsFullscreen();
+
+  if (isFullscreen) {
+    return null;
+  }
+
+  return (
+    <nav
+      aria-label="모드 전환"
+      className="fixed left-1/2 top-16 z-40 flex -translate-x-1/2 items-center gap-8"
+    >
+      {MODES.map(({ href, label, Icon }) => {
+        const isActive = pathname === href;
+        return (
+          <Link
+            key={href}
+            href={href}
+            aria-current={isActive ? "page" : undefined}
+            className={`flex flex-col items-center gap-1 text-[10px] font-light tracking-wide transition-colors ${
+              isActive
+                ? "text-gv-amber"
+                : "text-gv-titanium/70 hover:text-gv-titanium"
+            }`}
+          >
+            <Icon className="h-4 w-4" />
+            {label}
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}

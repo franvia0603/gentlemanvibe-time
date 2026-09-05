@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useIsFullscreen } from "@/hooks/useIsFullscreen";
 
 type FullscreenHintProps = {
   /** 화면에 노출할 기능명 (예: "디지털 클락") */
@@ -11,15 +11,6 @@ type FullscreenHintProps = {
 
 interface FullscreenCapableElement extends HTMLElement {
   webkitRequestFullscreen?: () => Promise<void> | void;
-}
-
-interface FullscreenCapableDocument extends Document {
-  webkitFullscreenElement?: Element | null;
-}
-
-function isFullscreenActive() {
-  const doc = document as FullscreenCapableDocument;
-  return Boolean(doc.fullscreenElement || doc.webkitFullscreenElement);
 }
 
 function enterFullscreen() {
@@ -35,18 +26,7 @@ export default function FullscreenHint({
   featureName,
   modeName,
 }: FullscreenHintProps) {
-  const [isFullscreen, setIsFullscreen] = useState(false);
-
-  useEffect(() => {
-    const handleChange = () => setIsFullscreen(isFullscreenActive());
-    handleChange();
-    document.addEventListener("fullscreenchange", handleChange);
-    document.addEventListener("webkitfullscreenchange", handleChange);
-    return () => {
-      document.removeEventListener("fullscreenchange", handleChange);
-      document.removeEventListener("webkitfullscreenchange", handleChange);
-    };
-  }, []);
+  const isFullscreen = useIsFullscreen();
 
   if (isFullscreen) {
     return null;
