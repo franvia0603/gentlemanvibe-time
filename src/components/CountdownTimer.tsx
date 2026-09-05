@@ -165,7 +165,6 @@ export default function CountdownTimer() {
   const isOverrun = useCountdownTimerStore((s) => s.isOverrun);
   const overrunSeconds = useCountdownTimerStore((s) => s.overrunSeconds);
   const onComplete = useCountdownTimerStore((s) => s.onComplete);
-  const title = useCountdownTimerStore((s) => s.title);
   const recentPresetMinutes = useCountdownTimerStore(
     (s) => s.recentPresetMinutes,
   );
@@ -173,7 +172,6 @@ export default function CountdownTimer() {
 
   const setTotalSeconds = useCountdownTimerStore((s) => s.setTotalSeconds);
   const setOnComplete = useCountdownTimerStore((s) => s.setOnComplete);
-  const setTitle = useCountdownTimerStore((s) => s.setTitle);
   const start = useCountdownTimerStore((s) => s.start);
   const pause = useCountdownTimerStore((s) => s.pause);
   const reset = useCountdownTimerStore((s) => s.reset);
@@ -216,21 +214,13 @@ export default function CountdownTimer() {
 
   return (
     <div className="flex w-full max-w-sm flex-col items-center gap-6 md:max-w-xl lg:max-w-3xl">
-      <input
-        type="text"
-        value={title}
-        onChange={(event) => setTitle(event.target.value)}
-        placeholder="제목 (선택, 예: 라면)"
-        maxLength={40}
-        className="w-full max-w-sm rounded-md border border-gv-titanium/25 bg-gv-charcoal/70 px-3 py-2 text-center text-sm text-gv-beige placeholder:text-gv-titanium focus:text-gv-amber focus:outline-none"
-      />
-
       {showBanner && (
         <div className="w-full max-w-sm rounded-md border border-gv-amber/40 bg-gv-charcoal/80 px-3 py-2 text-center text-sm text-gv-amber">
-          ⏰ {title || "타이머"} 완료!
+          ⏰ 타이머 완료!
         </div>
       )}
 
+      {/* 1. 다이얼 + 중앙 남은 시간 */}
       <div className="aspect-square w-full max-w-[380px]">
         <SegmentDial
           totalMinutes={totalSeconds / 60}
@@ -243,6 +233,7 @@ export default function CountdownTimer() {
         />
       </div>
 
+      {/* 2. 시/분/초 스피너 */}
       <div className="flex flex-wrap items-start justify-center gap-4">
         <UnitSpinner
           label="시"
@@ -267,11 +258,22 @@ export default function CountdownTimer() {
         />
       </div>
 
+      {/* 3. 시작/리셋 — 시간 설정 바로 아래로 붙여 조작 동선을 짧게 */}
+      <div className="flex items-center gap-4">
+        <Button active onClick={isRunning ? pause : start}>
+          {isRunning ? "일시정지" : "시작"}
+        </Button>
+        <Button onClick={reset} disabled={isRunning}>
+          리셋
+        </Button>
+      </div>
+
+      {/* 4. 라면 조리시간 프리셋 그리드 (+ 최근 사용) */}
       <div className="w-full">
         <p className="mb-2 text-center text-xs font-normal text-gv-titanium">
           라면 조리시간 프리셋
         </p>
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
           {RAMEN_PRESETS.map((preset) => (
             <RamenPresetButton
               key={preset.name}
@@ -282,27 +284,30 @@ export default function CountdownTimer() {
             />
           ))}
         </div>
+
+        {recentPresetMinutes.length > 0 && (
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
+            <span className="text-xs font-normal text-gv-titanium">최근</span>
+            {recentPresetMinutes.map((m) => (
+              <Button
+                key={m}
+                disabled={isRunning}
+                onClick={() => setTotalSeconds(m * 60)}
+              >
+                {m}분
+              </Button>
+            ))}
+          </div>
+        )}
+
+        {/* 5. 조리 팁 안내문 */}
         <p className="mt-3 text-center text-xs font-normal leading-relaxed text-gv-titanium">
           조리 팁: 봉지 뒷면에 적힌 정량의 물과 조리시간을 지키는 것이 가장
           맛있게 끓이는 비결입니다.
         </p>
       </div>
 
-      {recentPresetMinutes.length > 0 && (
-        <div className="flex w-full max-w-sm flex-wrap items-center justify-center gap-2">
-          <span className="text-xs font-normal text-gv-titanium">최근</span>
-          {recentPresetMinutes.map((m) => (
-            <Button
-              key={m}
-              disabled={isRunning}
-              onClick={() => setTotalSeconds(m * 60)}
-            >
-              {m}분
-            </Button>
-          ))}
-        </div>
-      )}
-
+      {/* 6. 종료 시 동작 + 종료음 테스트 (부가 설정) */}
       <div className="flex flex-col items-center gap-2">
         <span className="text-xs font-normal text-gv-titanium">
           종료 시 동작
@@ -322,15 +327,8 @@ export default function CountdownTimer() {
 
       <Button onClick={playCompletionTone}>종료음 테스트</Button>
 
-      <div className="flex items-center gap-4">
-        <Button active onClick={isRunning ? pause : start}>
-          {isRunning ? "일시정지" : "시작"}
-        </Button>
-        <Button onClick={reset} disabled={isRunning}>
-          리셋
-        </Button>
-        <FullscreenToggle tone="amber" />
-      </div>
+      {/* 7. 풀스크린 토글 (다른 페이지와 동일한 위치 패턴) */}
+      <FullscreenToggle tone="amber" />
     </div>
   );
 }

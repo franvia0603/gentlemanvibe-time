@@ -22,14 +22,12 @@ interface CountdownTimerState {
   /** 카운트다운 0 도달 시각(epoch ms) — overrun 구간에서도 기준점으로 재사용 */
   endAt: number | null;
   onComplete: CountdownOnComplete;
-  title: string;
   recentPresetMinutes: number[];
   /** 완료 배너를 트리거하기 위한 카운터 (매 완료마다 증가) */
   completionCount: number;
 
   setTotalSeconds: (seconds: number) => void;
   setOnComplete: (value: CountdownOnComplete) => void;
-  setTitle: (value: string) => void;
   start: () => void;
   pause: () => void;
   reset: () => void;
@@ -51,7 +49,6 @@ export const useCountdownTimerStore = create<CountdownTimerState>()(
       overrunSeconds: 0,
       endAt: null,
       onComplete: "stop",
-      title: "",
       recentPresetMinutes: [],
       completionCount: 0,
 
@@ -69,8 +66,6 @@ export const useCountdownTimerStore = create<CountdownTimerState>()(
       },
 
       setOnComplete: (value) => set({ onComplete: value }),
-
-      setTitle: (value) => set({ title: value.slice(0, 40) }),
 
       start: () => {
         const { isOverrun, remainingSeconds, totalSeconds, overrunSeconds } =
