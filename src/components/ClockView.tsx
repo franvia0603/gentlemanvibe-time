@@ -15,8 +15,14 @@ export default function ClockView() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center gap-6">
-      <div className="relative flex min-h-[280px] w-full items-center justify-center">
+    <div className="flex flex-col items-center gap-4">
+      <div
+        className="relative flex items-center justify-center"
+        style={{
+          width: "min(70vh, 70vw, calc(100vh - 15rem))",
+          height: "min(70vh, 70vw, calc(100vh - 15rem))",
+        }}
+      >
         <div
           className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${
             clockMode === "digital"
@@ -34,9 +40,7 @@ export default function ClockView() {
               : "pointer-events-none opacity-0"
           }`}
         >
-          <div className="aspect-square h-full max-h-[280px] w-full max-w-[280px]">
-            <AnalogClock />
-          </div>
+          <AnalogClock />
         </div>
       </div>
 
