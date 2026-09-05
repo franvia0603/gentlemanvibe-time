@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import defaultTheme from "tailwindcss/defaultTheme";
 
 const config: Config = {
   content: [
@@ -22,6 +23,9 @@ const config: Config = {
           "amber-glow": "var(--gv-amber-glow)",
           "brand-offwhite": "var(--gv-brand-offwhite)",
         },
+      },
+      fontFamily: {
+        sans: ["var(--font-inter)", ...defaultTheme.fontFamily.sans],
       },
     },
   },
