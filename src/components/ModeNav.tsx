@@ -112,7 +112,7 @@ export default function ModeNav() {
   return (
     <nav
       aria-label="모드 전환"
-      className="fixed left-1/2 top-16 z-40 flex w-[92vw] max-w-md -translate-x-1/2 flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:gap-x-6 md:gap-x-8"
+      className="flex w-[92vw] max-w-md flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:gap-x-6 md:gap-x-8"
     >
       {MODES.map(({ href, label, Icon }) => {
         const isActive = pathname === href;

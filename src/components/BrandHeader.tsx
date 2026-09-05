@@ -5,7 +5,7 @@ export default function BrandHeader() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="GentlemanVibe 메인 사이트로 이동"
-      className="fixed left-1/2 top-4 z-50 flex -translate-x-1/2 flex-col items-center gap-0.5 transition-opacity hover:opacity-80"
+      className="flex flex-col items-center gap-0.5 transition-opacity hover:opacity-80"
     >
       <span className="text-xl font-extrabold tracking-[0.15em] text-gv-brand-offwhite">
         GV

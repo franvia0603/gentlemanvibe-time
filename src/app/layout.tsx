@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import BrandHeader from "@/components/BrandHeader";
-import ModeNav from "@/components/ModeNav";
+import SiteHeader from "@/components/SiteHeader";
 import "./globals.css";
 
 const inter = Inter({
@@ -22,8 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} font-sans antialiased`}>
-        <BrandHeader />
-        <ModeNav />
+        <SiteHeader />
         {children}
       </body>
     </html>
