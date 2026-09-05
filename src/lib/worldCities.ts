@@ -48,6 +48,7 @@ export const DEFAULT_CITY_IDS = [
   "Australia/Sydney",
   "Asia/Dubai",
   "America/Los_Angeles",
+  "America/Toronto",
 ];
 
 export function getCityInfo(id: string): CityInfo | undefined {
