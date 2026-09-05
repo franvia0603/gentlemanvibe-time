@@ -1,6 +1,9 @@
 "use client";
 
+import { Bebas_Neue } from "next/font/google";
 import { useEffect, useRef, useState } from "react";
+
+const bebasNeue = Bebas_Neue({ subsets: ["latin"], weight: "400" });
 
 function formatTime(date: Date) {
   const hh = String(date.getHours()).padStart(2, "0");
@@ -60,7 +63,7 @@ export default function DigitalClock() {
 
   return (
     <div
-      className="select-none whitespace-nowrap text-[clamp(3.5rem,15vw,10rem)] font-extralight tabular-nums tracking-widest text-gv-amber-glow"
+      className={`${bebasNeue.className} select-none whitespace-nowrap text-[clamp(3.5rem,15vw,10rem)] tabular-nums tracking-widest text-gv-amber-glow`}
       style={{
         textShadow: "0 0 40px var(--gv-amber-glow), 0 0 90px var(--gv-amber)",
       }}
