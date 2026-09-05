@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+export type ClockMode = "digital" | "analog";
+
 interface ClockSettingsState {
   /** true면 12시간제 + 오전/오후 표시, false면 24시간제 */
   amPm: boolean;
@@ -10,11 +12,14 @@ interface ClockSettingsState {
   showDate: boolean;
   /** 위치 기반 날씨 표시 여부 */
   showWeather: boolean;
+  /** 홈 화면 클락 표시 모드 (디지털/아날로그) */
+  clockMode: ClockMode;
 
   setAmPm: (value: boolean) => void;
   setHideSeconds: (value: boolean) => void;
   setShowDate: (value: boolean) => void;
   setShowWeather: (value: boolean) => void;
+  setClockMode: (value: ClockMode) => void;
 }
 
 export const useClockSettingsStore = create<ClockSettingsState>()(
@@ -24,11 +29,13 @@ export const useClockSettingsStore = create<ClockSettingsState>()(
       hideSeconds: false,
       showDate: false,
       showWeather: false,
+      clockMode: "digital",
 
       setAmPm: (value) => set({ amPm: value }),
       setHideSeconds: (value) => set({ hideSeconds: value }),
       setShowDate: (value) => set({ showDate: value }),
       setShowWeather: (value) => set({ showWeather: value }),
+      setClockMode: (value) => set({ clockMode: value }),
     }),
     {
       name: "gv-clock-display-settings",
@@ -40,6 +47,7 @@ export const useClockSettingsStore = create<ClockSettingsState>()(
         hideSeconds: state.hideSeconds,
         showDate: state.showDate,
         showWeather: state.showWeather,
+        clockMode: state.clockMode,
       }),
     },
   ),
