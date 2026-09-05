@@ -24,17 +24,23 @@ type PomodoroDialProps = {
   remainingLabel?: string;
 };
 
+// 삼각함수 결과는 서버(Node.js)와 브라우저의 부동소수점 마지막 자리가
+// 미세하게 달라질 수 있어, 좌표를 소수점 3자리로 고정해 hydration mismatch를 막는다.
+function round(value: number) {
+  return Math.round(value * 1000) / 1000;
+}
+
 function polarPoint(radius: number, angleDeg: number) {
   const rad = (angleDeg * Math.PI) / 180;
   return {
-    x: CENTER + radius * Math.cos(rad),
-    y: CENTER + radius * Math.sin(rad),
+    x: round(CENTER + radius * Math.cos(rad)),
+    y: round(CENTER + radius * Math.sin(rad)),
   };
 }
 
 /** 0분을 12시 방향(-90deg)에 두고 시계 방향으로 진행하는 각도 */
 function angleForMinute(minute: number) {
-  return (minute / SEGMENT_COUNT) * 360 - 90;
+  return round((minute / SEGMENT_COUNT) * 360 - 90);
 }
 
 export default function PomodoroDial({

@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
-import PomodoroDial from "@/components/PomodoroDial";
+import PomodoroTimer from "@/components/PomodoroTimer";
+import FullscreenHint from "@/components/FullscreenHint";
 
 export const metadata: Metadata = {
-  title: "Pomodoro Dial Preview — GentlemanVibe Time",
+  title: "Pomodoro — GentlemanVibe Time",
 };
 
-export default function PomodoroPreviewPage() {
+export default function PomodoroPage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gv-matte-black p-8">
-      <div className="aspect-square w-full max-w-[460px]">
-        <PomodoroDial />
-      </div>
+      <PomodoroTimer />
+      <FullscreenHint featureName="뽀모도로 타이머" modeName="Focus" />
     </main>
   );
 }
