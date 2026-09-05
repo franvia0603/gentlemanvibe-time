@@ -31,7 +31,6 @@ function MinuteStepper({
         disabled={disabled}
         onClick={() => onChange(minutes - 1)}
         aria-label={`${label} 시간 줄이기`}
-        className="h-9 w-9"
       >
         <span className="text-lg leading-none">−</span>
       </IconButton>
@@ -54,7 +53,6 @@ function MinuteStepper({
         disabled={disabled}
         onClick={() => onChange(minutes + 1)}
         aria-label={`${label} 시간 늘리기`}
-        className="h-9 w-9"
       >
         <span className="text-lg leading-none">+</span>
       </IconButton>

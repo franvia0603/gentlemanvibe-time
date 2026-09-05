@@ -103,7 +103,7 @@ export default function DigitalClock() {
   return (
     <div className="flex flex-col items-center gap-3">
       {showWeather && weather && (
-        <div className="text-xs font-light tracking-wide text-gv-titanium">
+        <div className="text-xs font-normal tracking-wide text-gv-titanium">
           {weather.temperature}°C
           {weatherLabel(weather.weatherCode) && ` · ${weatherLabel(weather.weatherCode)}`}
         </div>
@@ -123,7 +123,7 @@ export default function DigitalClock() {
       </div>
 
       {showDate && dateLabel && (
-        <div className="text-sm font-light tracking-widest text-gv-titanium">
+        <div className="text-sm font-normal tracking-widest text-gv-titanium">
           {dateLabel}
         </div>
       )}

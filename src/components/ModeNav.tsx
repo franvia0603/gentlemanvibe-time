@@ -74,11 +74,31 @@ function TimerIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+function WorldIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.5}
+      {...props}
+    >
+      <circle cx="12" cy="12" r="8.25" />
+      <path d="M3.75 12h16.5" strokeLinecap="round" />
+      <path
+        d="M12 3.75c2.6 2.2 2.6 14.3 0 16.5M12 3.75c-2.6 2.2-2.6 14.3 0 16.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 const MODES = [
   { href: "/", label: "Clock", Icon: ClockIcon },
   { href: "/pomodoro", label: "Focus", Icon: FocusIcon },
   { href: "/stopwatch", label: "Stopwatch", Icon: StopwatchIcon },
   { href: "/timer", label: "Timer", Icon: TimerIcon },
+  { href: "/world", label: "World", Icon: WorldIcon },
 ] as const;
 
 export default function ModeNav() {
@@ -92,7 +112,7 @@ export default function ModeNav() {
   return (
     <nav
       aria-label="모드 전환"
-      className="fixed left-1/2 top-16 z-40 flex -translate-x-1/2 items-center gap-8"
+      className="fixed left-1/2 top-16 z-40 flex w-[92vw] max-w-md -translate-x-1/2 flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:gap-x-6 md:gap-x-8"
     >
       {MODES.map(({ href, label, Icon }) => {
         const isActive = pathname === href;

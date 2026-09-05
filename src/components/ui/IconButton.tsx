@@ -18,9 +18,10 @@ export type IconButtonSize = "sm" | "md";
 // className을 뒤에 이어붙여 크기를 덮어쓰면 Tailwind 유틸리티 우선순위가
 // 소스 작성 순서가 아니라 컴파일된 스타일시트 순서로 결정되어 신뢰할 수
 // 없다 — 크기별로 완전한 클래스 문자열을 미리 선언해 안전하게 분기한다.
+// spec 5.0.3: 터치 타깃은 항상 최소 40~44px을 유지한다 (sm도 예외 아님).
 const SIZE_CLASSES: Record<IconButtonSize, string> = {
-  sm: "h-8 w-8",
-  md: "h-10 w-10",
+  sm: "h-10 w-10",
+  md: "h-11 w-11",
 };
 
 export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

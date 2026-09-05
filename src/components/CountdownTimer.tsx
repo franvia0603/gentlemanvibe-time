@@ -12,7 +12,57 @@ import {
 } from "@/store/useCountdownTimerStore";
 import { playCompletionTone } from "@/lib/sound";
 
-const PRESET_MINUTES = [1, 3, 5, 10, 15, 30];
+type RamenPreset = {
+  name: string;
+  brand: string;
+  seconds: number;
+  timeLabel: string;
+  note: string;
+};
+
+// 스펙 5.2 라면 프리셋 10종 (조리시간·비고는 봉지 뒷면 기준)
+const RAMEN_PRESETS: RamenPreset[] = [
+  { name: "신라면", brand: "농심", seconds: 270, timeLabel: "4분 30초", note: "물 550ml" },
+  {
+    name: "너구리",
+    brand: "농심",
+    seconds: 300,
+    timeLabel: "5분",
+    note: "물 550ml, 면과 스프를 같이 넣고 끓임",
+  },
+  { name: "안성탕면", brand: "농심", seconds: 270, timeLabel: "4분 30초", note: "물 550ml" },
+  {
+    name: "짜파게티",
+    brand: "농심",
+    seconds: 300,
+    timeLabel: "5분",
+    note: "물 600ml로 삶은 뒤 물 8스푼 남기고 비비기",
+  },
+  { name: "진라면", brand: "오뚜기", seconds: 240, timeLabel: "4분", note: "물 550ml" },
+  {
+    name: "참깨라면",
+    brand: "오뚜기",
+    seconds: 240,
+    timeLabel: "4분",
+    note: "물 500ml, 계란블록·유성스프는 조리 후 마지막에",
+  },
+  { name: "진짬뽕", brand: "오뚜기", seconds: 300, timeLabel: "5분", note: "물 500ml" },
+  {
+    name: "불닭볶음면",
+    brand: "삼양식품",
+    seconds: 300,
+    timeLabel: "5분",
+    note: "물 600ml로 삶은 뒤 물 8스푼 남기고 볶기",
+  },
+  { name: "삼양라면", brand: "삼양식품", seconds: 240, timeLabel: "4분", note: "물 550ml" },
+  {
+    name: "팔도비빔면",
+    brand: "팔도",
+    seconds: 180,
+    timeLabel: "3분",
+    note: "끓인 후 찬물에 헹궈 비비기",
+  },
+];
 
 const ON_COMPLETE_OPTIONS: { value: CountdownOnComplete; label: string }[] = [
   { value: "stop", label: "정지" },
@@ -71,6 +121,38 @@ function UnitSpinner({ label, value, max, disabled, onChange }: UnitSpinnerProps
       </IconButton>
       <span className="text-xs font-normal text-gv-titanium">{label}</span>
     </div>
+  );
+}
+
+type RamenPresetButtonProps = {
+  preset: RamenPreset;
+  active: boolean;
+  disabled: boolean;
+  onClick: () => void;
+};
+
+function RamenPresetButton({
+  preset,
+  active,
+  disabled,
+  onClick,
+}: RamenPresetButtonProps) {
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={onClick}
+      className={`flex min-h-[44px] flex-col items-start justify-center gap-0.5 rounded-lg border border-gv-titanium/25 bg-gv-charcoal/70 px-3 py-2.5 text-left transition-colors hover:text-gv-amber disabled:cursor-not-allowed disabled:opacity-40 ${
+        active ? "text-gv-amber" : "text-gv-beige"
+      }`}
+    >
+      <span className="text-sm font-normal">
+        {preset.name} {preset.timeLabel}
+      </span>
+      <span className="text-xs font-normal text-gv-titanium">
+        {preset.brand}
+      </span>
+    </button>
   );
 }
 
@@ -133,18 +215,18 @@ export default function CountdownTimer() {
   const centerLabel = isOverrun ? `+${formatClock(overrunSeconds)}` : undefined;
 
   return (
-    <div className="flex w-full max-w-sm flex-col items-center gap-6">
+    <div className="flex w-full max-w-sm flex-col items-center gap-6 md:max-w-xl lg:max-w-3xl">
       <input
         type="text"
         value={title}
         onChange={(event) => setTitle(event.target.value)}
         placeholder="제목 (선택, 예: 라면)"
         maxLength={40}
-        className="w-full rounded-md border border-gv-titanium/25 bg-gv-charcoal/70 px-3 py-2 text-center text-sm text-gv-beige placeholder:text-gv-titanium focus:text-gv-amber focus:outline-none"
+        className="w-full max-w-sm rounded-md border border-gv-titanium/25 bg-gv-charcoal/70 px-3 py-2 text-center text-sm text-gv-beige placeholder:text-gv-titanium focus:text-gv-amber focus:outline-none"
       />
 
       {showBanner && (
-        <div className="w-full rounded-md border border-gv-amber/40 bg-gv-charcoal/80 px-3 py-2 text-center text-sm text-gv-amber">
+        <div className="w-full max-w-sm rounded-md border border-gv-amber/40 bg-gv-charcoal/80 px-3 py-2 text-center text-sm text-gv-amber">
           ⏰ {title || "타이머"} 완료!
         </div>
       )}
@@ -185,20 +267,29 @@ export default function CountdownTimer() {
         />
       </div>
 
-      <div className="flex flex-wrap items-center justify-center gap-2">
-        {PRESET_MINUTES.map((m) => (
-          <Button
-            key={m}
-            disabled={isRunning}
-            onClick={() => setTotalSeconds(m * 60)}
-          >
-            {m}분
-          </Button>
-        ))}
+      <div className="w-full">
+        <p className="mb-2 text-center text-xs font-normal text-gv-titanium">
+          라면 조리시간 프리셋
+        </p>
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+          {RAMEN_PRESETS.map((preset) => (
+            <RamenPresetButton
+              key={preset.name}
+              preset={preset}
+              active={totalSeconds === preset.seconds}
+              disabled={isRunning}
+              onClick={() => setTotalSeconds(preset.seconds)}
+            />
+          ))}
+        </div>
+        <p className="mt-3 text-center text-xs font-normal leading-relaxed text-gv-titanium">
+          조리 팁: 봉지 뒷면에 적힌 정량의 물과 조리시간을 지키는 것이 가장
+          맛있게 끓이는 비결입니다.
+        </p>
       </div>
 
       {recentPresetMinutes.length > 0 && (
-        <div className="flex flex-wrap items-center justify-center gap-2">
+        <div className="flex w-full max-w-sm flex-wrap items-center justify-center gap-2">
           <span className="text-xs font-normal text-gv-titanium">최근</span>
           {recentPresetMinutes.map((m) => (
             <Button
