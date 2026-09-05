@@ -152,20 +152,16 @@ export default function PomodoroDial({
         );
       })}
 
-      {/* 중심 — 남은 시간 */}
+      {/* 중심 — 남은 시간 (매초 갱신되므로 글로우 없이 단색으로 가독성 확보) */}
       <text
         x={CENTER}
         y={CENTER}
         textAnchor="middle"
         dominantBaseline="middle"
         fontSize={80}
-        fill="var(--gv-amber-glow)"
+        fill="var(--gv-amber)"
         className={bebasNeue.className}
-        style={{
-          fontVariantNumeric: "tabular-nums",
-          filter:
-            "drop-shadow(0 0 20px var(--gv-amber-glow)) drop-shadow(0 0 45px var(--gv-amber))",
-        }}
+        style={{ fontVariantNumeric: "tabular-nums" }}
       >
         {remainingLabel}
       </text>
