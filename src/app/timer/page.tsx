@@ -1,6 +1,7 @@
 import CountdownTimer from "@/components/CountdownTimer";
 import FullscreenHint from "@/components/FullscreenHint";
 import PageShell from "@/components/PageShell";
+import TimeStoriesWidget from "@/components/TimeStoriesWidget";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
@@ -16,6 +17,7 @@ export default function TimerPage() {
       <h1 className="sr-only">GV Timer — 카운트다운 타이머</h1>
       <CountdownTimer />
       <FullscreenHint featureName="카운트다운 타이머" modeName="Timer" />
+      <TimeStoriesWidget />
     </PageShell>
   );
 }

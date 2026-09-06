@@ -2,6 +2,7 @@ import Stopwatch from "@/components/Stopwatch";
 import FullscreenHint from "@/components/FullscreenHint";
 import PageShell from "@/components/PageShell";
 import UsageGuide from "@/components/UsageGuide";
+import TimeStoriesWidget from "@/components/TimeStoriesWidget";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
@@ -23,6 +24,7 @@ export default function StopwatchPage() {
           "기록된 랩 중 가장 빠른 구간과 가장 느린 구간은 자동으로 색이 구분되어 표시되므로, 여러 번 반복되는 작업이나 운동의 페이스를 비교할 때 유용합니다. 일시정지 후 다시 시작해도 시간은 끊기지 않고 정확히 이어집니다.",
         ]}
       />
+      <TimeStoriesWidget />
     </PageShell>
   );
 }

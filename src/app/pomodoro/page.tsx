@@ -2,6 +2,7 @@ import PomodoroTimer from "@/components/PomodoroTimer";
 import FullscreenHint from "@/components/FullscreenHint";
 import PageShell from "@/components/PageShell";
 import UsageGuide from "@/components/UsageGuide";
+import TimeStoriesWidget from "@/components/TimeStoriesWidget";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
@@ -23,6 +24,7 @@ export default function PomodoroPage() {
           "시간을 설정하면 다이얼이 그 분량만큼 꽉 채워진 상태로 시작하고, 시간이 흐를수록 세그먼트가 하나씩 줄어들어 남은 시간을 한눈에 확인할 수 있습니다. 집중 시간이 끝나면 자동으로 휴식 시간으로 전환되며, 전체화면으로 전환하면 다이얼과 남은 시간만 남아 방해 요소 없이 집중할 수 있습니다.",
         ]}
       />
+      <TimeStoriesWidget />
     </PageShell>
   );
 }

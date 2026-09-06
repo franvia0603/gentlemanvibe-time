@@ -93,12 +93,36 @@ function WorldIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+function GuideIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.5}
+      {...props}
+    >
+      <path
+        d="M4 5.5c0-.8.7-1.5 1.5-1.5H12v15H5.5c-.8 0-1.5.7-1.5 1.5V5.5Z"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v15h6.5c.8 0 1.5.7 1.5 1.5V5.5Z"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 const MODES = [
   { href: "/", label: "Clock", Icon: ClockIcon },
   { href: "/pomodoro", label: "Focus", Icon: FocusIcon },
   { href: "/stopwatch", label: "Stopwatch", Icon: StopwatchIcon },
   { href: "/timer", label: "Timer", Icon: TimerIcon },
   { href: "/world", label: "World", Icon: WorldIcon },
+  { href: "/guide", label: "시간이야기", Icon: GuideIcon },
 ] as const;
 
 export default function ModeNav() {
@@ -115,7 +139,9 @@ export default function ModeNav() {
       className="flex flex-1 flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:gap-x-6 md:gap-x-8"
     >
       {MODES.map(({ href, label, Icon }) => {
-        const isActive = pathname === href;
+        const isActive =
+          pathname === href ||
+          (href !== "/" && pathname.startsWith(`${href}/`));
         return (
           <Link
             key={href}

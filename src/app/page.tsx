@@ -3,6 +3,7 @@ import FullscreenHint from "@/components/FullscreenHint";
 import SettingsPanel from "@/components/SettingsPanel";
 import PageShell from "@/components/PageShell";
 import UsageGuide from "@/components/UsageGuide";
+import TimeStoriesWidget from "@/components/TimeStoriesWidget";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
@@ -25,6 +26,7 @@ export default function Home() {
           "디지털/아날로그 전환 버튼으로 원하는 스타일을 선택할 수 있으며, 설정 아이콘을 눌러 오전/오후 표시, 초 숨김, 날짜·요일 표시, 위치 기반 날씨 표시를 각각 켜고 끌 수 있습니다. 설정한 내용은 브라우저에 자동으로 저장되어 다음 방문 시에도 그대로 유지됩니다.",
         ]}
       />
+      <TimeStoriesWidget />
     </PageShell>
   );
 }

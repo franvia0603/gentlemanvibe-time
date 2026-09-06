@@ -2,6 +2,7 @@ import WorldClock from "@/components/WorldClock";
 import FullscreenHint from "@/components/FullscreenHint";
 import PageShell from "@/components/PageShell";
 import UsageGuide from "@/components/UsageGuide";
+import TimeStoriesWidget from "@/components/TimeStoriesWidget";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
@@ -23,6 +24,7 @@ export default function WorldClockPage() {
           "'추가' 버튼을 눌러 원하는 도시를 검색해서 새로 추가하거나, 필요 없는 도시는 카드의 삭제 버튼으로 언제든 제거할 수 있습니다. 추가하거나 삭제한 목록은 브라우저에 저장되어 다음 방문 시에도 그대로 유지됩니다.",
         ]}
       />
+      <TimeStoriesWidget />
     </PageShell>
   );
 }
