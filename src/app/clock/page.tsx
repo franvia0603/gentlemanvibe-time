@@ -4,6 +4,7 @@ import SettingsPanel from "@/components/SettingsPanel";
 import PageShell from "@/components/PageShell";
 import UsageGuide from "@/components/UsageGuide";
 import TimeStoriesWidget from "@/components/TimeStoriesWidget";
+import ShareButtons from "@/components/ShareButtons";
 import { buildMetadata } from "@/lib/seo";
 
 // spec 3.4.1: 기본 랜딩 페이지가 Focus로 바뀌면서 Clock 콘텐츠는
@@ -29,6 +30,7 @@ export default function ClockPage() {
         ]}
       />
       <TimeStoriesWidget />
+      <ShareButtons title="Clock — GentlemanVibe Time" />
     </PageShell>
   );
 }

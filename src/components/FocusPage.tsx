@@ -3,6 +3,7 @@ import FullscreenHint from "@/components/FullscreenHint";
 import PageShell from "@/components/PageShell";
 import UsageGuide from "@/components/UsageGuide";
 import TimeStoriesWidget from "@/components/TimeStoriesWidget";
+import ShareButtons from "@/components/ShareButtons";
 
 /**
  * spec 3.4.1: 기본 랜딩 페이지가 Clock에서 Focus로 바뀌면서, "/"와
@@ -22,6 +23,7 @@ export default function FocusPage() {
         ]}
       />
       <TimeStoriesWidget />
+      <ShareButtons title="GV Focus 뽀모도로 타이머 — GentlemanVibe Time" />
     </PageShell>
   );
 }

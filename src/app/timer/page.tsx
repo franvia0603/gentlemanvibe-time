@@ -2,6 +2,7 @@ import CountdownTimer from "@/components/CountdownTimer";
 import FullscreenHint from "@/components/FullscreenHint";
 import PageShell from "@/components/PageShell";
 import TimeStoriesWidget from "@/components/TimeStoriesWidget";
+import ShareButtons from "@/components/ShareButtons";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
@@ -18,6 +19,7 @@ export default function TimerPage() {
       <CountdownTimer />
       <FullscreenHint featureName="카운트다운 타이머" modeName="Timer" />
       <TimeStoriesWidget />
+      <ShareButtons title="Timer — GentlemanVibe Time" />
     </PageShell>
   );
 }

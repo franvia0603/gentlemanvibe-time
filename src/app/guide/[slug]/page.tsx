@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import StaticPageShell from "@/components/StaticPageShell";
+import ShareButtons from "@/components/ShareButtons";
 import { GUIDE_ARTICLES, getGuideArticle } from "@/lib/guideArticles";
 import { buildMetadata } from "@/lib/seo";
 
@@ -58,6 +59,7 @@ export default function GuideArticlePage({ params }: GuideArticlePageProps) {
       ) : (
         <p>이 글은 아직 준비 중입니다. 곧 채워질 예정이니 조금만 기다려 주세요.</p>
       )}
+      <ShareButtons title={`${article.title} — GentlemanVibe Time`} />
     </StaticPageShell>
   );
 }

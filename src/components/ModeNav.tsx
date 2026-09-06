@@ -6,6 +6,29 @@ import { usePathname } from "next/navigation";
 import type { SVGProps } from "react";
 import { useIsFullscreen } from "@/hooks/useIsFullscreen";
 
+function HomeIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.5}
+      {...props}
+    >
+      <path
+        d="M4 11.5 12 4l8 7.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M6 9.5V19a1 1 0 0 0 1 1h3v-5.5h4V20h3a1 1 0 0 0 1-1V9.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 function ClockIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
@@ -145,22 +168,27 @@ function CloseIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-// spec 3.4.1: "시간이야기"가 맨 왼쪽, 이어서 Clock/Focus/Stopwatch/Timer/
-// World. 기본 랜딩 페이지가 Focus로 바뀌면서 Focus는 "/", Clock은
-// "/clock"으로 이동했다.
+// spec 3.4.1: 맨 앞에 홈(집 아이콘, "/") 탭을 추가하고, 이어서
+// 시간이야기 → Clock → Focus → Stopwatch → Timer → World. 기본 랜딩
+// 페이지가 Focus로 바뀌면서 Focus는 "/", Clock은 "/clock"으로 이동했다.
+// 홈과 Focus가 둘 다 "/"를 가리키므로 href만으로는 React key/활성 판정이
+// 겹친다 — 각 항목에 고유한 id를 따로 둔다.
 const MODES = [
-  { href: "/guide", label: "시간이야기", Icon: GuideIcon },
-  { href: "/clock", label: "Clock", Icon: ClockIcon },
-  { href: "/", label: "Focus", Icon: FocusIcon },
-  { href: "/stopwatch", label: "Stopwatch", Icon: StopwatchIcon },
-  { href: "/timer", label: "Timer", Icon: TimerIcon },
-  { href: "/world", label: "World", Icon: WorldIcon },
+  { id: "home", href: "/", label: "홈", Icon: HomeIcon },
+  { id: "guide", href: "/guide", label: "시간이야기", Icon: GuideIcon },
+  { id: "clock", href: "/clock", label: "Clock", Icon: ClockIcon },
+  { id: "focus", href: "/", label: "Focus", Icon: FocusIcon },
+  { id: "stopwatch", href: "/stopwatch", label: "Stopwatch", Icon: StopwatchIcon },
+  { id: "timer", href: "/timer", label: "Timer", Icon: TimerIcon },
+  { id: "world", href: "/world", label: "World", Icon: WorldIcon },
 ] as const;
 
-function isModeActive(pathname: string, href: string) {
-  // "/pomodoro"는 Focus("/")와 동일한 화면을 보여주는 대체 URL이므로
-  // (spec 3.4.1), 그 경로에 있을 때도 Focus 탭을 활성 상태로 표시한다.
-  if (href === "/") return pathname === "/" || pathname === "/pomodoro";
+function isModeActive(pathname: string, id: string, href: string) {
+  // 홈과 Focus는 같은 "/"를 가리키지만, 동시에 둘 다 활성 표시되면
+  // 오히려 혼란스럽다 — "/"에서는 홈만, "/pomodoro"에서는 Focus만
+  // 활성 표시되도록 역할을 나눈다(둘 다 정확히 하나의 경로에만 대응).
+  if (id === "home") return pathname === "/";
+  if (id === "focus") return pathname === "/pomodoro";
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
@@ -182,11 +210,11 @@ export default function ModeNav() {
         aria-label="모드 전환"
         className="hidden items-center justify-center gap-x-3 md:flex lg:gap-x-4"
       >
-        {MODES.map(({ href, label, Icon }) => {
-          const isActive = isModeActive(pathname, href);
+        {MODES.map(({ id, href, label, Icon }) => {
+          const isActive = isModeActive(pathname, id, href);
           return (
             <Link
-              key={href}
+              key={id}
               href={href}
               aria-current={isActive ? "page" : undefined}
               className={`flex min-h-10 flex-col items-center justify-center gap-0.5 px-1 text-[11px] font-normal tracking-wide transition-colors ${
@@ -225,11 +253,11 @@ export default function ModeNav() {
             aria-label="모드 전환"
             className="absolute left-1/2 top-12 z-50 flex w-48 -translate-x-1/2 flex-col gap-1 rounded-lg border border-gv-titanium/20 bg-gv-charcoal/95 p-2 shadow-lg"
           >
-            {MODES.map(({ href, label, Icon }) => {
-              const isActive = isModeActive(pathname, href);
+            {MODES.map(({ id, href, label, Icon }) => {
+              const isActive = isModeActive(pathname, id, href);
               return (
                 <Link
-                  key={href}
+                  key={id}
                   href={href}
                   aria-current={isActive ? "page" : undefined}
                   onClick={() => setMenuOpen(false)}
