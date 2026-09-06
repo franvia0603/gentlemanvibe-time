@@ -4,14 +4,24 @@ import {
   GUIDE_CATEGORIES,
   GUIDE_CATEGORY_LABELS,
 } from "@/lib/guideArticles";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, SITE_URL } from "@/lib/seo";
 
-export const metadata = buildMetadata({
+const baseMetadata = buildMetadata({
   title: "시간이야기 — GentlemanVibe Time",
   description:
     "시간 관리 이론·기법과 시간의 과학·역사를 다루는 GentlemanVibe Time의 아티클 모음.",
   path: "/guide",
 });
+
+// RSS 자동 검색(브라우저/피드 리더가 <link rel="alternate">를 인식)을
+// 위해 /guide 목록 페이지에만 피드 링크를 추가한다.
+export const metadata = {
+  ...baseMetadata,
+  alternates: {
+    ...baseMetadata.alternates,
+    types: { "application/rss+xml": `${SITE_URL}/rss.xml` },
+  },
+};
 
 export default function GuidePage() {
   return (

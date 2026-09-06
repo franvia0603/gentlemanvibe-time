@@ -5,6 +5,8 @@ export interface GuideArticle {
   title: string;
   category: GuideCategory;
   summary: string;
+  /** ISO 8601 날짜 — RSS pubDate 등에 사용. 실제 본문 작성 시 실제 발행일로 교체한다. */
+  publishedAt: string;
 }
 
 export const GUIDE_CATEGORY_LABELS: Record<GuideCategory, string> = {
@@ -21,11 +23,17 @@ export const GUIDE_ARTICLES: GuideArticle[] = Array.from(
   (_, i) => {
     const index = i + 1;
     const category: GuideCategory = index % 2 === 1 ? "theory" : "science";
+    // 임시 발행일 — 2026-01-01부터 하루씩 증가시켜 결정적인(빌드마다
+    // 안 바뀌는) 값을 준다. 실제 본문 작성 시 진짜 발행일로 교체한다.
+    const publishedAt = new Date(
+      Date.UTC(2026, 0, 1 + (index - 1)),
+    ).toISOString();
     return {
       slug: `article-${String(index).padStart(2, "0")}`,
       title: `시간이야기 #${String(index).padStart(2, "0")} (제목 준비 중)`,
       category,
       summary: "본문 준비 중입니다.",
+      publishedAt,
     };
   },
 );

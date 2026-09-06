@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { GUIDE_ARTICLES } from "@/lib/guideArticles";
 import { SITE_URL } from "@/lib/seo";
 
 const ROUTES: { path: string; priority: number }[] = [
@@ -7,6 +8,7 @@ const ROUTES: { path: string; priority: number }[] = [
   { path: "/stopwatch", priority: 0.8 },
   { path: "/timer", priority: 0.8 },
   { path: "/world", priority: 0.8 },
+  { path: "/guide", priority: 0.6 },
   { path: "/about", priority: 0.5 },
   { path: "/privacy-policy", priority: 0.3 },
   { path: "/contact", priority: 0.5 },
@@ -15,10 +17,19 @@ const ROUTES: { path: string; priority: number }[] = [
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
 
-  return ROUTES.map(({ path, priority }) => ({
+  const staticEntries = ROUTES.map(({ path, priority }) => ({
     url: `${SITE_URL}${path}`,
     lastModified,
-    changeFrequency: "monthly",
+    changeFrequency: "monthly" as const,
     priority,
   }));
+
+  const guideEntries = GUIDE_ARTICLES.map((article) => ({
+    url: `${SITE_URL}/guide/${article.slug}`,
+    lastModified: new Date(article.publishedAt),
+    changeFrequency: "monthly" as const,
+    priority: 0.4,
+  }));
+
+  return [...staticEntries, ...guideEntries];
 }
