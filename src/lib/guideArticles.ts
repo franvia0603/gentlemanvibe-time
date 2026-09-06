@@ -138,24 +138,78 @@ const WRITTEN_ARTICLES: GuideArticle[] = [
   },
 ];
 
-// 6~20번: 아직 본문이 없는 placeholder 글 — 카테고리는 번갈아 배치해 목록 그리드 확인용으로만 쓴다.
-const PLACEHOLDER_ARTICLES: GuideArticle[] = Array.from(
-  { length: 15 },
-  (_, i) => {
-    const index = i + 6;
-    const category: GuideCategory = index % 2 === 1 ? "theory" : "science";
-    return {
-      slug: `article-${String(index).padStart(2, "0")}`,
-      title: `시간이야기 #${String(index).padStart(2, "0")} (제목 준비 중)`,
-      category,
-      summary: "본문 준비 중입니다.",
-      publishedAt: publishedAtFor(index),
-    };
+function placeholderArticle(index: number): GuideArticle {
+  const category: GuideCategory = index % 2 === 1 ? "theory" : "science";
+  return {
+    slug: `article-${String(index).padStart(2, "0")}`,
+    title: `시간이야기 #${String(index).padStart(2, "0")} (제목 준비 중)`,
+    category,
+    summary: "본문 준비 중입니다.",
+    publishedAt: publishedAtFor(index),
+  };
+}
+
+// 6~10번: 본문은 아직 없지만(다음 배치에서 작성 예정) 인포그래픽 이미지는
+// 먼저 반영한다 — 각 alt 텍스트는 실제 인포그래픽 내용(딥워크/하루 세 가지
+// 우선순위/시테크/아침형·저녁형/번아웃 방지 휴식)을 그대로 요약한다.
+const IMAGE_ONLY_ARTICLES: GuideArticle[] = [
+  {
+    ...placeholderArticle(6),
+    image: {
+      src: "/guide/images/article-06.webp",
+      alt: "딥워크 인포그래픽 — 방해 없이 몰입해 깊이 집중하는 딥워크 개념 설명",
+      width: 1200,
+      height: 900,
+    },
   },
+  {
+    ...placeholderArticle(7),
+    image: {
+      src: "/guide/images/article-07.webp",
+      alt: "하루 세 가지 우선순위 인포그래픽 — 매일 가장 중요한 일 세 가지만 먼저 정하는 방법 설명",
+      width: 1200,
+      height: 900,
+    },
+  },
+  {
+    ...placeholderArticle(8),
+    image: {
+      src: "/guide/images/article-08.webp",
+      alt: "시테크 인포그래픽 — 시간을 재테크하듯 계획적으로 관리하는 시테크 개념 설명",
+      width: 1200,
+      height: 900,
+    },
+  },
+  {
+    ...placeholderArticle(9),
+    image: {
+      src: "/guide/images/article-09.webp",
+      alt: "아침형·저녁형 인포그래픽 — 개인의 생체리듬에 따른 아침형·저녁형 인간 비교 설명",
+      width: 1200,
+      height: 900,
+    },
+  },
+  {
+    ...placeholderArticle(10),
+    image: {
+      src: "/guide/images/article-10.webp",
+      alt: "번아웃 방지 휴식 인포그래픽 — 번아웃을 막기 위한 의도적인 휴식 습관 설명",
+      width: 1200,
+      height: 900,
+    },
+  },
+];
+
+// 11~20번: 아직 본문도 이미지도 없는 placeholder 글 — 카테고리는 번갈아
+// 배치해 목록 그리드 확인용으로만 쓴다.
+const PLACEHOLDER_ARTICLES: GuideArticle[] = Array.from(
+  { length: 10 },
+  (_, i) => placeholderArticle(i + 11),
 );
 
 export const GUIDE_ARTICLES: GuideArticle[] = [
   ...WRITTEN_ARTICLES,
+  ...IMAGE_ONLY_ARTICLES,
   ...PLACEHOLDER_ARTICLES,
 ];
 
