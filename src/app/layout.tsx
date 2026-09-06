@@ -51,6 +51,11 @@ export const metadata: Metadata = {
     title: "GV Time",
   },
   alternates: { canonical: SITE_URL },
+  // 검색엔진 소유권 확인 태그 — 각 서치콘솔에서 발급한 값을 그대로 사용.
+  other: {
+    "msvalidate.01": "C50E89F7C4548F89B68EA0187DDBE7CA",
+    "naver-site-verification": "9a7e04679beda7ae2e367f1e5f4f8cd0ad306a0a",
+  },
   openGraph: {
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
