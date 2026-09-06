@@ -2,8 +2,11 @@ import type { MetadataRoute } from "next";
 import { GUIDE_ARTICLES } from "@/lib/guideArticles";
 import { SITE_URL } from "@/lib/seo";
 
+// spec 3.4.1: "/"는 이제 Focus를 렌더링한다. "/pomodoro"는 동일한
+// 화면을 별도 URL로 유지하고, Clock은 "/clock"으로 이동했다.
 const ROUTES: { path: string; priority: number }[] = [
   { path: "", priority: 1 },
+  { path: "/clock", priority: 0.8 },
   { path: "/pomodoro", priority: 0.8 },
   { path: "/stopwatch", priority: 0.8 },
   { path: "/timer", priority: 0.8 },

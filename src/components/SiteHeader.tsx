@@ -18,12 +18,16 @@ import { useIsFullscreen } from "@/hooks/useIsFullscreen";
  * 풀스크린 중 스스로 숨지만 토글은 계속 보여야 하므로, ModeNav가 사라진
  * 자리에서 토글만 남았을 때는 가운데로 재정렬한다.
  *
- * 헤더는 뷰포트 폭에 따라 ModeNav 탭이 한 줄/두 줄로 바뀌며 실제 높이가
- * 달라진다. 본문이 고정 pt-* 값 하나로 이 가변 높이를 가정하면, 두 줄로
- * 줄바꿈되는 구간에서 본문 최상단 요소가 헤더에 가려 잘리는 문제가
- * 생긴다(spec 6). ResizeObserver로 헤더의 실제 렌더링 높이를 측정해
- * `--gv-header-height` CSS 변수로 반영하면, PageShell/StaticPageShell이
- * 이 값을 읽어 항상 정확한 안전 여백을 확보할 수 있다.
+ * 헤더 높이는 여전히 ResizeObserver로 측정해 `--gv-header-height` CSS
+ * 변수에 반영한다(spec 6) — 모바일 햄버거 메뉴가 펼쳐지면 그만큼 헤더가
+ * 높아지는 경우에도 PageShell/StaticPageShell이 항상 정확한 안전 여백을
+ * 확보하도록 하기 위함이다.
+ *
+ * spec 3.4.1: ModeNav가 6개 탭이 되며 한 줄에 다 안 들어가는 문제가
+ * 있었다 — 데스크톱/태블릿(md 이상)에서는 압축된 한 줄 탭으로, 그보다
+ * 좁은 화면에서는 햄버거 메뉴로 전환해 해결했다(ModeNav 내부에서 처리).
+ * 이 컨테이너는 md 이상에서 폭 제한을 풀어(md:w-auto) ModeNav가 필요한
+ * 만큼 넓어질 수 있게 하고, 모바일에서는 기존 max-w-md를 유지한다.
  *
  * spec 3.3.2: 펀치홀 카메라 기기에서 풀스크린 진입 시 GV 로고가 카메라
  * 컷아웃과 겹치는 문제가 있어, 상단 padding에 env(safe-area-inset-top)를
@@ -62,7 +66,7 @@ export default function SiteHeader() {
       {isFullscreen ? (
         <FullscreenToggle />
       ) : (
-        <div className="flex w-[95vw] max-w-md items-start gap-2">
+        <div className="flex w-[95vw] max-w-md items-center gap-2 md:w-auto md:max-w-none">
           <FullscreenToggle />
           <ModeNav />
         </div>
