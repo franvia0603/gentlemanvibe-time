@@ -34,7 +34,7 @@ function publishedAtFor(index: number) {
 // 1~5번: 실제 본문이 채워진 글 (spec 3.7, 1차 5개 배치).
 const WRITTEN_ARTICLES: GuideArticle[] = [
   {
-    slug: "article-01",
+    slug: "pomodoro-technique",
     title: "뽀모도로 기법 — 토마토 타이머 하나가 바꾼 집중의 방식",
     category: "theory",
     summary:
@@ -55,7 +55,7 @@ const WRITTEN_ARTICLES: GuideArticle[] = [
     ],
   },
   {
-    slug: "article-02",
+    slug: "parkinsons-law",
     title: "파킨슨의 법칙 — 시간은 왜 항상 마감에 맞춰 늘어나는가",
     category: "theory",
     summary:
@@ -76,7 +76,7 @@ const WRITTEN_ARTICLES: GuideArticle[] = [
     ],
   },
   {
-    slug: "article-03",
+    slug: "two-minute-rule",
     title: "2분 규칙 — 사소한 일을 미루지 않는 가장 간단한 방법",
     category: "theory",
     summary:
@@ -97,7 +97,7 @@ const WRITTEN_ARTICLES: GuideArticle[] = [
     ],
   },
   {
-    slug: "article-04",
+    slug: "time-blocking",
     title: "타임 블로킹 — 할 일 목록 대신 캘린더에 시간을 배치하는 법",
     category: "theory",
     summary:
@@ -117,7 +117,7 @@ const WRITTEN_ARTICLES: GuideArticle[] = [
     ],
   },
   {
-    slug: "article-05",
+    slug: "eisenhower-matrix",
     title: "아이젠하워 매트릭스 — 급한 일과 중요한 일을 구분하는 법",
     category: "theory",
     summary:
@@ -141,7 +141,7 @@ const WRITTEN_ARTICLES: GuideArticle[] = [
 // 6~10번: 실제 본문이 채워진 글 (spec 3.7, 2차 5개 배치).
 const WRITTEN_ARTICLES_2: GuideArticle[] = [
   {
-    slug: "article-06",
+    slug: "deep-work",
     title: "딥워크란 무엇인가: 집중력을 지키는 시간 설계",
     category: "theory",
     summary:
@@ -161,7 +161,7 @@ const WRITTEN_ARTICLES_2: GuideArticle[] = [
     ],
   },
   {
-    slug: "article-07",
+    slug: "rule-of-three",
     title: "하루 세 가지 우선순위 법칙: 할 일을 줄이는 역설",
     category: "theory",
     summary:
@@ -181,7 +181,7 @@ const WRITTEN_ARTICLES_2: GuideArticle[] = [
     ],
   },
   {
-    slug: "article-08",
+    slug: "time-tech",
     title: "시테크(時Tech)란: 시간을 재테크처럼 관리하는 법",
     category: "theory",
     summary:
@@ -201,7 +201,7 @@ const WRITTEN_ARTICLES_2: GuideArticle[] = [
     ],
   },
   {
-    slug: "article-09",
+    slug: "chronotype",
     title: "아침형 인간과 저녁형 인간, 생산성은 정말 다를까",
     category: "theory",
     summary:
@@ -221,7 +221,7 @@ const WRITTEN_ARTICLES_2: GuideArticle[] = [
     ],
   },
   {
-    slug: "article-10",
+    slug: "scheduled-rest",
     title: "번아웃을 막는 휴식 설계: 쉬는 것도 계획이 필요하다",
     category: "theory",
     summary:

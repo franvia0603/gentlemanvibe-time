@@ -17,7 +17,31 @@ const withPWA = withPWAInit({
   disable: process.env.NODE_ENV === "development",
 });
 
+// 시간이야기 아티클 slug를 숫자 코드(article-01 등)에서 의미가 담긴
+// 영문 슬러그로 바꾸면서, 이미 색인되었거나 공유된 옛 URL이 깨지지
+// 않도록 301(영구 이동)로 새 URL에 연결한다.
+const GUIDE_SLUG_REDIRECTS = {
+  "article-01": "pomodoro-technique",
+  "article-02": "parkinsons-law",
+  "article-03": "two-minute-rule",
+  "article-04": "time-blocking",
+  "article-05": "eisenhower-matrix",
+  "article-06": "deep-work",
+  "article-07": "rule-of-three",
+  "article-08": "time-tech",
+  "article-09": "chronotype",
+  "article-10": "scheduled-rest",
+};
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  async redirects() {
+    return Object.entries(GUIDE_SLUG_REDIRECTS).map(([from, to]) => ({
+      source: `/guide/${from}`,
+      destination: `/guide/${to}`,
+      permanent: true,
+    }));
+  },
+};
 
 export default withPWA(nextConfig);
