@@ -7,6 +7,7 @@ import { useWorldClockStore } from "@/store/useWorldClockStore";
 import { CITY_CATALOG, SEOUL_TIMEZONE, getCityInfo } from "@/lib/worldCities";
 import Button from "@/components/ui/Button";
 import IconButton from "@/components/ui/IconButton";
+import { useIsFullscreen } from "@/hooks/useIsFullscreen";
 
 const bebasNeue = Bebas_Neue({ subsets: ["latin"], weight: "400" });
 
@@ -103,6 +104,7 @@ function CityCard({ id, label, now, removable, onRemove }: CityCardProps) {
 
 export default function WorldClock() {
   const now = useNow();
+  const isFullscreen = useIsFullscreen();
   const cityIds = useWorldClockStore((s) => s.cityIds);
   const addCity = useWorldClockStore((s) => s.addCity);
   const removeCity = useWorldClockStore((s) => s.removeCity);
@@ -130,42 +132,46 @@ export default function WorldClock() {
               id={id}
               label={info.label}
               now={now}
-              removable={id !== SEOUL_TIMEZONE}
+              removable={!isFullscreen && id !== SEOUL_TIMEZONE}
               onRemove={() => removeCity(id)}
             />
           );
         })}
       </div>
 
-      <div className="flex w-full max-w-sm flex-wrap items-center justify-center gap-2">
-        {availableToAdd.length > 0 && (
-          <>
-            <select
-              value={selectedToAdd}
-              onChange={(event) => setSelectedToAdd(event.target.value)}
-              aria-label="추가할 도시 선택"
-              className="min-h-[44px] flex-1 rounded-md border border-gv-titanium/25 bg-gv-charcoal/70 px-3 text-sm text-gv-beige focus:text-gv-amber focus:outline-none"
-            >
-              <option value="">도시 추가...</option>
-              {availableToAdd.map((city) => (
-                <option key={city.id} value={city.id}>
-                  {city.label}
-                </option>
-              ))}
-            </select>
-            <Button
-              disabled={!selectedToAdd}
-              onClick={() => {
-                if (!selectedToAdd) return;
-                addCity(selectedToAdd);
-                setSelectedToAdd("");
-              }}
-            >
-              추가
-            </Button>
-          </>
-        )}
-      </div>
+      {/* spec 3.3.1: 풀스크린 중엔 선택해둔 도시 카드만 남기고, 도시
+          추가/검색 같은 편집 UI는 숨긴다. */}
+      {!isFullscreen && (
+        <div className="flex w-full max-w-sm flex-wrap items-center justify-center gap-2">
+          {availableToAdd.length > 0 && (
+            <>
+              <select
+                value={selectedToAdd}
+                onChange={(event) => setSelectedToAdd(event.target.value)}
+                aria-label="추가할 도시 선택"
+                className="min-h-[44px] flex-1 rounded-md border border-gv-titanium/25 bg-gv-charcoal/70 px-3 text-sm text-gv-beige focus:text-gv-amber focus:outline-none"
+              >
+                <option value="">도시 추가...</option>
+                {availableToAdd.map((city) => (
+                  <option key={city.id} value={city.id}>
+                    {city.label}
+                  </option>
+                ))}
+              </select>
+              <Button
+                disabled={!selectedToAdd}
+                onClick={() => {
+                  if (!selectedToAdd) return;
+                  addCity(selectedToAdd);
+                  setSelectedToAdd("");
+                }}
+              >
+                추가
+              </Button>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }

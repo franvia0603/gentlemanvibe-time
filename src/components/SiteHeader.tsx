@@ -24,6 +24,12 @@ import { useIsFullscreen } from "@/hooks/useIsFullscreen";
  * 생긴다(spec 6). ResizeObserver로 헤더의 실제 렌더링 높이를 측정해
  * `--gv-header-height` CSS 변수로 반영하면, PageShell/StaticPageShell이
  * 이 값을 읽어 항상 정확한 안전 여백을 확보할 수 있다.
+ *
+ * spec 3.3.2: 펀치홀 카메라 기기에서 풀스크린 진입 시 GV 로고가 카메라
+ * 컷아웃과 겹치는 문제가 있어, 상단 padding에 env(safe-area-inset-top)를
+ * 더한다. 노치가 없는 기기/일반 브라우저 탭에서는 그 값이 0이라 기존
+ * 여백(1rem)과 동일하게 렌더링된다 — 풀스크린 여부로 분기할 필요 없이
+ * 항상 켜둬도 안전하다.
  */
 export default function SiteHeader() {
   const isFullscreen = useIsFullscreen();
@@ -49,7 +55,8 @@ export default function SiteHeader() {
   return (
     <div
       ref={headerRef}
-      className="fixed inset-x-0 top-0 z-50 flex flex-col items-center gap-1 border-b border-gv-titanium/10 bg-gv-matte-black pb-3 pt-4"
+      className="fixed inset-x-0 top-0 z-50 flex flex-col items-center gap-1 border-b border-gv-titanium/10 bg-gv-matte-black pb-3"
+      style={{ paddingTop: "calc(1rem + env(safe-area-inset-top))" }}
     >
       <BrandHeader />
       {isFullscreen ? (

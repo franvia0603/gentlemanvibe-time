@@ -6,6 +6,7 @@ import Button from "@/components/ui/Button";
 import IconButton from "@/components/ui/IconButton";
 import { usePomodoroTicker } from "@/hooks/usePomodoroTicker";
 import { usePomodoroStore } from "@/store/usePomodoroStore";
+import { useIsFullscreen } from "@/hooks/useIsFullscreen";
 
 type MinuteStepperProps = {
   label: string;
@@ -61,6 +62,7 @@ function MinuteStepper({
 
 export default function PomodoroTimer() {
   usePomodoroTicker();
+  const isFullscreen = useIsFullscreen();
 
   const mode = usePomodoroStore((s) => s.mode);
   const remainingSeconds = usePomodoroStore((s) => s.remainingSeconds);
@@ -98,29 +100,35 @@ export default function PomodoroTimer() {
         />
       </div>
 
-      <div className="flex items-center gap-4">
-        <Button tone="timer-red" active onClick={isRunning ? pause : start}>
-          {isRunning ? "일시정지" : "시작"}
-        </Button>
-        <Button tone="timer-red" onClick={reset}>
-          리셋
-        </Button>
-      </div>
+      {/* spec 3.3.1: 풀스크린 중엔 다이얼(+남은 시간)만 남기고, 시작/리셋
+          버튼과 분 설정 스테퍼 같은 옵션성 컨트롤은 숨긴다. */}
+      {!isFullscreen && (
+        <>
+          <div className="flex items-center gap-4">
+            <Button tone="timer-red" active onClick={isRunning ? pause : start}>
+              {isRunning ? "일시정지" : "시작"}
+            </Button>
+            <Button tone="timer-red" onClick={reset}>
+              리셋
+            </Button>
+          </div>
 
-      <div className="flex flex-col items-center gap-3 pt-2">
-        <MinuteStepper
-          label="집중"
-          minutes={focusMinutes}
-          disabled={isRunning}
-          onChange={setFocusMinutes}
-        />
-        <MinuteStepper
-          label="휴식"
-          minutes={breakMinutes}
-          disabled={isRunning}
-          onChange={setBreakMinutes}
-        />
-      </div>
+          <div className="flex flex-col items-center gap-3 pt-2">
+            <MinuteStepper
+              label="집중"
+              minutes={focusMinutes}
+              disabled={isRunning}
+              onChange={setFocusMinutes}
+            />
+            <MinuteStepper
+              label="휴식"
+              minutes={breakMinutes}
+              disabled={isRunning}
+              onChange={setBreakMinutes}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 }

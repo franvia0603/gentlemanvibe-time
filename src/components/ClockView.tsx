@@ -5,10 +5,12 @@ import DigitalClock from "@/components/DigitalClock";
 import AnalogClock from "@/components/AnalogClock";
 import Button from "@/components/ui/Button";
 import { useClockSettingsStore } from "@/store/useClockSettingsStore";
+import { useIsFullscreen } from "@/hooks/useIsFullscreen";
 
 export default function ClockView() {
   const clockMode = useClockSettingsStore((s) => s.clockMode);
   const setClockMode = useClockSettingsStore((s) => s.setClockMode);
+  const isFullscreen = useIsFullscreen();
 
   useEffect(() => {
     // 마운트 후에만 저장된 설정을 복원해 SSR과의 hydration mismatch를 피한다.
@@ -45,15 +47,19 @@ export default function ClockView() {
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
-        <Button
-          onClick={() =>
-            setClockMode(clockMode === "digital" ? "analog" : "digital")
-          }
-        >
-          {clockMode === "digital" ? "Analog로 전환" : "Digital로 전환"}
-        </Button>
-      </div>
+      {/* spec 3.3.1: 풀스크린 중엔 시계 자체만 남기고, 모드 전환 버튼 같은
+          옵션성 컨트롤은 숨긴다. */}
+      {!isFullscreen && (
+        <div className="flex items-center gap-3">
+          <Button
+            onClick={() =>
+              setClockMode(clockMode === "digital" ? "analog" : "digital")
+            }
+          >
+            {clockMode === "digital" ? "Analog로 전환" : "Digital로 전환"}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
