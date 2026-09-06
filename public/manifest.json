@@ -1,0 +1,16 @@
+{
+  "name": "GentlemanVibe Time",
+  "short_name": "GV Time",
+  "description": "데스크테리어를 위한 프리미엄 디지털·아날로그 클락 & 타이머 웹앱",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d0d0d",
+  "theme_color": "#0d0d0d",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}

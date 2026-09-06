@@ -1,9 +1,12 @@
-import type { Metadata } from "next";
 import StaticPageShell from "@/components/StaticPageShell";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy",
-};
+export const metadata = buildMetadata({
+  title: "Privacy Policy — GentlemanVibe Time",
+  description:
+    "GentlemanVibe Time의 개인정보처리방침 — 수집하는 정보, 로컬 저장소 사용, 위치 정보 처리 방식을 안내합니다.",
+  path: "/privacy-policy",
+});
 
 export default function PrivacyPolicyPage() {
   return (

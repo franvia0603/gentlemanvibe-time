@@ -1,9 +1,12 @@
-import type { Metadata } from "next";
 import StaticPageShell from "@/components/StaticPageShell";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About GentlemanVibe Time",
-};
+export const metadata = buildMetadata({
+  title: "About — GentlemanVibe Time",
+  description:
+    "GentlemanVibe Time은 GentlemanVibe가 만든 공식 데스크테리어 시계·타이머 서비스입니다.",
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (

@@ -1,9 +1,12 @@
-import type { Metadata } from "next";
 import StaticPageShell from "@/components/StaticPageShell";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Contact Us",
-};
+export const metadata = buildMetadata({
+  title: "Contact — GentlemanVibe Time",
+  description:
+    "GentlemanVibe Time에 대한 문의, 제안, 버그 신고는 이메일로 보내주세요.",
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (
