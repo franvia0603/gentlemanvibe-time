@@ -192,7 +192,54 @@ function isModeActive(pathname: string, id: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
+/**
+ * 데스크톱/태블릿(md 이상) 전용 압축된 한 줄 탭(spec 3.4.1). 모바일
+ * 폭에서는 렌더링 자체를 하지 않는다 — 햄버거 트리거+메뉴는 별도의
+ * MobileNavMenu가 담당한다(spec 3.4.3: 모바일에서 헤더를 좌-햄버거/
+ * 중앙-로고/우-풀스크린토글 3분할로 재배치하려면 햄버거 트리거를
+ * ModeNav에서 분리해 독립적으로 배치할 수 있어야 했다).
+ */
 export default function ModeNav() {
+  const pathname = usePathname();
+  const isFullscreen = useIsFullscreen();
+
+  if (isFullscreen) {
+    return null;
+  }
+
+  return (
+    <nav
+      aria-label="모드 전환"
+      className="hidden items-center justify-center gap-x-3 md:flex lg:gap-x-4"
+    >
+      {MODES.map(({ id, href, label, Icon }) => {
+        const isActive = isModeActive(pathname, id, href);
+        return (
+          <Link
+            key={id}
+            href={href}
+            aria-current={isActive ? "page" : undefined}
+            className={`flex min-h-10 flex-col items-center justify-center gap-0.5 px-1 text-[11px] font-normal tracking-wide transition-colors ${
+              isActive
+                ? "text-gv-amber"
+                : "text-gv-titanium hover:text-gv-beige"
+            }`}
+          >
+            <Icon className="h-4 w-4" />
+            {label}
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}
+
+/**
+ * 모바일(md 미만) 전용 햄버거 트리거+드롭다운. spec 3.4.3에 따라
+ * SiteHeader가 이걸 화면 좌측 구석에 독립적으로 배치한다 — 우측 구석의
+ * FullscreenToggle과 분리된 컴포넌트라야 서로 다른 위치에 놓을 수 있다.
+ */
+export function MobileNavMenu() {
   const pathname = usePathname();
   const isFullscreen = useIsFullscreen();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -202,79 +249,47 @@ export default function ModeNav() {
   }
 
   return (
-    <div className="flex flex-1 justify-center">
-      {/* 데스크톱/태블릿: 압축된 한 줄 탭 (spec 3.4.1) — 아이콘/폰트/간격을
-          줄여서 6개 탭이 항상 한 줄에 들어가게 하되, 터치 타깃은
-          min-h-10(40px)로 유지한다. */}
-      <nav
-        aria-label="모드 전환"
-        className="hidden items-center justify-center gap-x-3 md:flex lg:gap-x-4"
+    <div className="relative md:hidden">
+      <button
+        type="button"
+        onClick={() => setMenuOpen((value) => !value)}
+        aria-expanded={menuOpen}
+        aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-gv-titanium/25 bg-gv-charcoal/70 text-gv-beige transition-colors hover:text-gv-amber"
       >
-        {MODES.map(({ id, href, label, Icon }) => {
-          const isActive = isModeActive(pathname, id, href);
-          return (
-            <Link
-              key={id}
-              href={href}
-              aria-current={isActive ? "page" : undefined}
-              className={`flex min-h-10 flex-col items-center justify-center gap-0.5 px-1 text-[11px] font-normal tracking-wide transition-colors ${
-                isActive
-                  ? "text-gv-amber"
-                  : "text-gv-titanium hover:text-gv-beige"
-              }`}
-            >
-              <Icon className="h-4 w-4" />
-              {label}
-            </Link>
-          );
-        })}
-      </nav>
-
-      {/* 모바일: 압축해도 6개 탭이 한 줄에 안 들어가는 좁은 뷰포트에서는
-          탭 나열 대신 햄버거 메뉴로 전환한다 — 버튼 자체는 항상 보이고,
-          펼치면 6개 탭이 세로로 나열된다. */}
-      <div className="relative md:hidden">
-        <button
-          type="button"
-          onClick={() => setMenuOpen((value) => !value)}
-          aria-expanded={menuOpen}
-          aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-gv-titanium/25 bg-gv-charcoal/70 text-gv-beige transition-colors hover:text-gv-amber"
-        >
-          {menuOpen ? (
-            <CloseIcon className="h-5 w-5" />
-          ) : (
-            <HamburgerIcon className="h-5 w-5" />
-          )}
-        </button>
-
-        {menuOpen && (
-          <nav
-            aria-label="모드 전환"
-            className="absolute left-1/2 top-12 z-50 flex w-48 -translate-x-1/2 flex-col gap-1 rounded-lg border border-gv-titanium/20 bg-gv-charcoal/95 p-2 shadow-lg"
-          >
-            {MODES.map(({ id, href, label, Icon }) => {
-              const isActive = isModeActive(pathname, id, href);
-              return (
-                <Link
-                  key={id}
-                  href={href}
-                  aria-current={isActive ? "page" : undefined}
-                  onClick={() => setMenuOpen(false)}
-                  className={`flex min-h-10 items-center gap-3 rounded-md px-3 text-sm font-normal transition-colors ${
-                    isActive
-                      ? "text-gv-amber"
-                      : "text-gv-beige hover:text-gv-amber"
-                  }`}
-                >
-                  <Icon className="h-5 w-5" />
-                  {label}
-                </Link>
-              );
-            })}
-          </nav>
+        {menuOpen ? (
+          <CloseIcon className="h-5 w-5" />
+        ) : (
+          <HamburgerIcon className="h-5 w-5" />
         )}
-      </div>
+      </button>
+
+      {menuOpen && (
+        <nav
+          aria-label="모드 전환"
+          className="absolute left-0 top-12 z-50 flex w-48 flex-col gap-1 rounded-lg border border-gv-titanium/20 bg-gv-charcoal/95 p-2 shadow-lg"
+        >
+          {MODES.map(({ id, href, label, Icon }) => {
+            const isActive = isModeActive(pathname, id, href);
+            return (
+              <Link
+                key={id}
+                href={href}
+                aria-current={isActive ? "page" : undefined}
+                onClick={() => setMenuOpen(false)}
+                className={`flex min-h-10 items-center gap-3 rounded-md px-3 text-sm font-normal transition-colors ${
+                  isActive
+                    ? "text-gv-amber"
+                    : "text-gv-beige hover:text-gv-amber"
+                }`}
+              >
+                <Icon className="h-5 w-5" />
+                {label}
+              </Link>
+            );
+          })}
+        </nav>
+      )}
     </div>
   );
 }

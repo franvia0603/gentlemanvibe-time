@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import BrandHeader from "@/components/BrandHeader";
-import ModeNav from "@/components/ModeNav";
+import ModeNav, { MobileNavMenu } from "@/components/ModeNav";
 import FullscreenToggle from "@/components/FullscreenToggle";
 import { useIsFullscreen } from "@/hooks/useIsFullscreen";
 
@@ -32,8 +32,19 @@ import { useIsFullscreen } from "@/hooks/useIsFullscreen";
  * spec 3.3.2: 펀치홀 카메라 기기에서 풀스크린 진입 시 GV 로고가 카메라
  * 컷아웃과 겹치는 문제가 있어, 상단 padding에 env(safe-area-inset-top)를
  * 더한다. 노치가 없는 기기/일반 브라우저 탭에서는 그 값이 0이라 기존
- * 여백(1rem)과 동일하게 렌더링된다 — 풀스크린 여부로 분기할 필요 없이
- * 항상 켜둬도 안전하다.
+ * 여백과 동일하게 렌더링된다 — 풀스크린 여부로 분기할 필요 없이 항상
+ * 켜둬도 안전하다. 실기기 검증 결과 일부 삼성 펀치홀 카메라는 브라우저가
+ * 표준 세이프 에어리어로 인식하지 못해 env()가 0으로 계산되는 경우가
+ * 있었다 — 그래서 env() 값과 별개로 최소 44px(버튼 하나 높이 정도)의
+ * 고정 여백을 항상 더해, 세이프 에어리어 인식 여부와 무관하게 로고가
+ * 화면 최상단에서 충분히 떨어지도록 보장한다. 이 여백은 헤더 컨테이너
+ * 전체의 padding-top이라 풀스크린/일반 모드 양쪽에 동일하게 적용된다.
+ *
+ * spec 3.4.3: 모바일(햄버거 전환 뷰포트)에서는 햄버거 메뉴와 풀스크린
+ * 토글이 한 줄에 나란히 좌측 클러스터로 몰려 있어 위치가 애매하게
+ * 겹쳐 보였다 — 좌측 구석에 햄버거, 우측 구석에 풀스크린 토글, 그
+ * 사이 중앙에 로고를 두는 3분할 그리드로 재배치한다. 데스크톱/태블릿은
+ * 기존의 로고-상단 + 토글/네비 한 줄 구조를 그대로 유지한다.
  */
 export default function SiteHeader() {
   const isFullscreen = useIsFullscreen();
@@ -60,17 +71,33 @@ export default function SiteHeader() {
     <div
       ref={headerRef}
       className="fixed inset-x-0 top-0 z-50 flex flex-col items-center gap-1 border-b border-gv-titanium/10 bg-gv-matte-black pb-3"
-      style={{ paddingTop: "calc(1rem + env(safe-area-inset-top))" }}
+      style={{ paddingTop: "calc(44px + env(safe-area-inset-top))" }}
     >
-      <BrandHeader />
-      {isFullscreen ? (
-        <FullscreenToggle />
-      ) : (
-        <div className="flex w-[95vw] max-w-md items-center gap-2 md:w-auto md:max-w-none">
-          <FullscreenToggle />
-          <ModeNav />
+      {/* 모바일 전용 3분할 헤더(spec 3.4.3): 좌-햄버거 / 중앙-로고 / 우-토글 */}
+      <div className="grid w-full grid-cols-3 items-center px-3 md:hidden">
+        <div className="flex justify-start">
+          <MobileNavMenu />
         </div>
-      )}
+        <div className="flex justify-center">
+          <BrandHeader />
+        </div>
+        <div className="flex justify-end">
+          <FullscreenToggle />
+        </div>
+      </div>
+
+      {/* 데스크톱/태블릿: 기존 구조(로고 위, 토글+네비 한 줄 아래) 그대로 유지 */}
+      <div className="hidden flex-col items-center gap-1 md:flex">
+        <BrandHeader />
+        {isFullscreen ? (
+          <FullscreenToggle />
+        ) : (
+          <div className="flex items-center gap-2">
+            <FullscreenToggle />
+            <ModeNav />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

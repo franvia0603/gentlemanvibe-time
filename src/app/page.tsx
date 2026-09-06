@@ -2,9 +2,9 @@ import FocusPage from "@/components/FocusPage";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "GentlemanVibe Time — GV Focus 뽀모도로 타이머",
+  title: "GV 집중력타이머 : 뽀모도로 포커스 타이머 | GentlemanVibe Time",
   description:
-    "뽀모도로 기법 기반 온라인 집중 타이머. 집중·휴식 시간을 자유롭게 설정하고 전체화면으로 몰입하세요.",
+    "25분 집중, 5분 휴식. 원형 다이얼로 남은 시간을 한눈에 보는 무료 집중력 타이머 GV 포커스. 데스크테리어 감성의 뽀모도로 타이머.",
   path: "",
 });
 
