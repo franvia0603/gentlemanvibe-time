@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
@@ -30,10 +31,13 @@ const webApplicationJsonLd = {
 
 // spec 3.3.2: 노치/카메라 컷아웃 기기에서 env(safe-area-inset-*)가
 // 정상적으로 계산되려면 viewport-fit=cover가 먼저 설정돼 있어야 한다.
+// themeColor는 PWA 설치 시 상태표시줄/작업 전환 화면 색상에 반영된다 —
+// manifest.json의 theme_color와 동일한 매트 블랙으로 맞춘다.
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
+  themeColor: "#0d0d0d",
 };
 
 export const metadata: Metadata = {
@@ -41,6 +45,11 @@ export const metadata: Metadata = {
   title: SITE_NAME,
   description: SITE_DESCRIPTION,
   manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "GV Time",
+  },
   alternates: { canonical: SITE_URL },
   openGraph: {
     title: SITE_NAME,
@@ -69,6 +78,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(webApplicationJsonLd) }}
         />
+        <ServiceWorkerRegister />
         <SiteHeader />
         {children}
         <SiteFooter />
