@@ -50,9 +50,21 @@ export default function PrivacyPolicyPage() {
         4. 쿠키 및 광고
       </h2>
       <p>
-        본 서비스는 향후 Google AdSense를 통한 광고를 게재할 수 있으며,
-        Google 및 광고 파트너는 쿠키를 사용해 관심 기반 광고를 제공할 수
-        있습니다. Google의 광고 개인정보 처리방침은{" "}
+        본 서비스는 Google Analytics(GA4)를 통해 방문자 수, 인기 페이지,
+        기기 종류 등 서비스 이용 통계를 수집합니다. 이 과정에서 쿠키가
+        사용되며, 수집되는 정보는 개인을 특정하지 않는 형태로만
+        분석됩니다. 또한 향후 Google AdSense를 통한 광고를 게재할 수
+        있으며, Google 및 광고 파트너는 쿠키를 사용해 관심 기반 광고를
+        제공할 수 있습니다. Google의 개인정보 처리방침은{" "}
+        <a
+          href="https://policies.google.com/privacy"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gv-amber underline underline-offset-2"
+        >
+          policies.google.com/privacy
+        </a>
+        , 광고 관련 정책은{" "}
         <a
           href="https://policies.google.com/technologies/ads"
           target="_blank"
@@ -61,15 +73,17 @@ export default function PrivacyPolicyPage() {
         >
           policies.google.com/technologies/ads
         </a>
-        에서 확인하실 수 있습니다.
+        에서 확인하실 수 있습니다. 쿠키 수집을 원치 않으시면 브라우저
+        설정에서 쿠키를 차단하거나 삭제할 수 있습니다.
       </p>
 
       <h2 className="mt-2 text-base font-normal text-gv-brand-offwhite">
         5. 제3자 서비스
       </h2>
       <p>
-        본 서비스는 Vercel(호스팅), Open-Meteo(날씨 정보 제공)를 이용하며,
-        각 서비스의 자체 개인정보처리방침이 적용될 수 있습니다.
+        본 서비스는 Vercel(호스팅), Open-Meteo(날씨 정보 제공), Google
+        Analytics(이용 통계 분석)를 이용하며, 각 서비스의 자체
+        개인정보처리방침이 적용될 수 있습니다.
       </p>
 
       <h2 className="mt-2 text-base font-normal text-gv-brand-offwhite">

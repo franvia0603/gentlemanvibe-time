@@ -3,8 +3,11 @@ import { Inter } from "next/font/google";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
 import "./globals.css";
+
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 const inter = Inter({
   subsets: ["latin"],
@@ -83,6 +86,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(webApplicationJsonLd) }}
         />
+        {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
         <ServiceWorkerRegister />
         <SiteHeader />
         {children}
