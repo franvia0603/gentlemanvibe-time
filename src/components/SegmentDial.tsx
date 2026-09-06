@@ -65,9 +65,25 @@ function polarPoint(radius: number, angleDeg: number) {
   };
 }
 
-/** 0분을 12시 방향(-90deg)에 두고 시계 방향으로 진행하는 각도 */
+/**
+ * 0분을 12시 방향(-90deg)에 두고 시계 방향으로 진행하는 각도.
+ * polarPoint(cos/sin 기반, 0°=3시 방향)로 좌표를 직접 계산하는
+ * 눈금·라벨 전용이다 — 세그먼트 회전에는 쓰지 않는다 (아래 참고).
+ */
 function angleForMinute(minute: number) {
   return round((minute / SEGMENT_COUNT) * 360 - 90);
+}
+
+/**
+ * 세그먼트 <rect>는 이미 12시 방향을 바라보도록 그려져 있어(회전 0 =
+ * 0분), SVG `rotate()`의 기준점 자체가 polarPoint와 다르다. 여기에
+ * angleForMinute의 -90°를 그대로 적용하면 기준점이 이중으로 어긋나
+ * 세그먼트 0번이 12시가 아닌 9시(45분 눈금) 위치에서부터 그려지는
+ * 버그가 생긴다(spec 5.1). 그래서 세그먼트 회전에는 -90° 보정 없이
+ * 순수 비율만 사용한다.
+ */
+function segmentRotationForMinute(minute: number) {
+  return round((minute / SEGMENT_COUNT) * 360);
 }
 
 function formatRemaining(totalSeconds: number) {
@@ -142,7 +158,7 @@ export default function SegmentDial({
     >
       {/* 방사형 세그먼트 링 — 설정 시간만큼 꽉 찬 상태로 시작해 남은 시간만큼만 유지 */}
       {Array.from({ length: SEGMENT_COUNT }, (_, i) => {
-        const angle = angleForMinute(i + 0.5);
+        const angle = segmentRotationForMinute(i + 0.5);
         const isInPlay = i < totalCount;
         const isFilled = isInPlay && i >= elapsedCount;
         const isLeadingEdge = isFilled && i < elapsedCount + GLOW_TAIL;
