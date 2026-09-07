@@ -37,8 +37,10 @@ export default function ClockPage() {
       {/* Clock 페이지 전용 순서(재배치 요청): 날짜·시계·전환 버튼
           바로 다음에 광고 배너, 그 뒤에 FullscreenHint/사용법 등
           기존 콘텐츠가 이어진다 — 다른 도구 페이지(광고가 FullscreenHint
-          다음에 오는 순서)와는 의도적으로 다르다. */}
-      <AdBanner />
+          다음에 오는 순서)와는 의도적으로 다르다.
+          spec 3.4.5: 좁은 상단 여백(compact)으로 시계~버튼줄~광고
+          배너를 촘촘하게 붙인다 — 다른 페이지의 AdBanner는 그대로. */}
+      <AdBanner compact />
       <FullscreenHint featureName="디지털 클락" modeName="Clock" />
       <UsageGuide
         title="GV Clock 사용법"

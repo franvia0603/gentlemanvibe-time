@@ -68,9 +68,18 @@ export default function GuideArticlePage({ params }: GuideArticlePageProps) {
       )}
       {/* spec 3.6: 글 본문과 다음 콘텐츠(공유하기) 사이의 광고 자리 */}
       <AdBanner />
-      {/* spec 3.4.4: 교차 홍보 배너 — 뽀모도로 바로가기 → 젠틀맨바이브 순 */}
-      <PomodoroPromoBanner />
-      <GentlemanVibePromoBanner />
+      {/* spec 3.4.4: 교차 홍보 배너 — 뽀모도로 바로가기 → 젠틀맨바이브 순.
+          StaticPageShell은 본문 문단 간격을 위해 자식들 사이에
+          gap-4(16px)를 두는데, 이 gap이 두 배너 사이에도 그대로
+          적용되면 배너 자체의 mt-6(24px)와 합쳐져 다른 도구 페이지
+          (PageShell, gap 없음)보다 훨씬 넓은 40px 간격이 된다 — 두
+          배너를 하나의 래퍼로 묶어 gap-4의 대상이 "배너 쌍 전체"
+          하나가 되게 하면, 배너끼리의 간격은 오직 자체 mt-6만 적용돼
+          다른 페이지와 동일한 24px로 맞춰진다. */}
+      <div className="w-full">
+        <PomodoroPromoBanner />
+        <GentlemanVibePromoBanner />
+      </div>
       <ShareButtons title={`${article.title} — GentlemanVibe Time`} />
     </StaticPageShell>
   );

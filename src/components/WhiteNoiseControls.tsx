@@ -8,6 +8,7 @@ import {
   type WhiteNoiseTrackId,
 } from "@/store/useSoundSettingsStore";
 import { useWhiteNoisePlayerStore } from "@/store/useWhiteNoisePlayerStore";
+import { useIsFullscreen } from "@/hooks/useIsFullscreen";
 
 const TRACK_OPTIONS: { id: WhiteNoiseTrackId; label: string }[] = [
   { id: "rain", label: "빗소리" },
@@ -26,6 +27,12 @@ type WhiteNoiseControlsProps = {
  * localStorage에 저장되어 다음 방문에도 유지된다(재생 여부 자체는
  * 브라우저 자동재생 정책 때문에 저장하지 않는다 — 항상 정지 상태로
  * 시작).
+ *
+ * 버그 수정(spec 3.3.1 재확인): 이 컴포넌트가 useIsFullscreen()
+ * 가드 없이 구현돼 있어서, Clock/Focus 페이지 풀스크린 진입 시에도
+ * 계속 노출되는 버그가 실제 배포 사이트에서 확인됐다 — 같은 패턴을
+ * 쓰는 다른 옵션성 컨트롤(ShareButtons, UsageGuide 등)처럼 이
+ * 컴포넌트 스스로 풀스크린이면 숨는다.
  */
 export default function WhiteNoiseControls({
   tone = "amber",
@@ -36,10 +43,15 @@ export default function WhiteNoiseControls({
   const setVolume = useSoundSettingsStore((s) => s.setWhiteNoiseVolume);
   const isPlaying = useWhiteNoisePlayerStore((s) => s.isPlaying);
   const toggle = useWhiteNoisePlayerStore((s) => s.toggle);
+  const isFullscreen = useIsFullscreen();
 
   useEffect(() => {
     useSoundSettingsStore.persist.rehydrate();
   }, []);
+
+  if (isFullscreen) {
+    return null;
+  }
 
   return (
     <section className="flex w-full max-w-sm flex-col items-center gap-3 rounded-lg border border-gv-titanium/25 bg-gv-charcoal/70 px-4 py-4">

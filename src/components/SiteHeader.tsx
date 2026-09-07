@@ -46,6 +46,10 @@ import FullscreenToggle from "@/components/FullscreenToggle";
  * 그리드의 우측 칸은 로고를 가운데 정렬시키기 위한 빈 자리로만
  * 남겨두고(실제 토글은 그 위에 겹쳐서 독립적으로 그려진다), 데스크톱/
  * 태블릿의 nav 탭 줄에서도 토글을 완전히 뺐다.
+ *
+ * (한때 Clock 페이지 한정으로 이 코너 오버레이를 건너뛰는 예외가
+ * 있었으나 spec 3.4.3 재수정에서 취소됐다 — Clock 페이지도 예외 없이
+ * 항상 이 코너 오버레이 하나를 쓴다.)
  */
 export default function SiteHeader() {
   const headerRef = useRef<HTMLDivElement>(null);

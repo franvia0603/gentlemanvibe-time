@@ -82,6 +82,10 @@ function CompressIcon(props: SVGProps<SVGSVGElement>) {
  * spec 3.3.2)을 써서, 헤더 안의 로고/햄버거 행과 같은 높이에
  * 자연스럽게 정렬된다. z-index는 헤더 바(z-50)보다 높여 헤더 배경에
  * 가려지지 않도록 한다.
+ *
+ * (한때 Clock 페이지 한정으로 전환 버튼 옆 인라인 배치 예외가
+ * 있었으나 spec 3.4.3 재수정에서 취소됐다 — Clock 페이지도 예외 없이
+ * 이 코너 오버레이 하나로 통일한다.)
  */
 export default function FullscreenToggle() {
   const isFullscreen = useIsFullscreen();

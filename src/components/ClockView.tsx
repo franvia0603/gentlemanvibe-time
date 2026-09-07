@@ -54,18 +54,26 @@ export default function ClockView() {
   }, []);
 
   return (
-    <div className="flex w-full max-w-[480px] flex-col items-center gap-3">
+    <div className="flex w-full max-w-[480px] flex-col items-center gap-2">
       {!isFullscreen && showDate && dateLabel && (
         <div className="text-sm font-normal tracking-widest text-gv-titanium">
           {dateLabel}
         </div>
       )}
 
+      {/* spec 3.4.5: 풀스크린이 이미 있으니 일반 모드에서는 여백을
+          넉넉히 둘 필요가 없다는 원칙 — 시계 지름 상한을 좁혀서
+          전환/풀스크린 버튼 줄과 광고 배너까지 데스크톱 뷰포트
+          첫 화면 안에 들어오게 한다. 기존 70vh/100vh-15rem은 헤더·
+          버튼줄·광고 배너를 위한 공간을 충분히 남기지 못해 1440x900
+          기준으로 광고 배너가 스크롤 없이는 안 보였다 — 60vh로
+          낮추고, calc 예약값도 21rem(헤더+날짜+버튼줄+광고 배너 실측
+          합)으로 넉넉히 늘렸다. */}
       <div
         className="relative flex items-center justify-center"
         style={{
-          width: "min(70vh, 70vw, calc(100vh - 15rem))",
-          height: "min(70vh, 70vw, calc(100vh - 15rem))",
+          width: "min(60vh, 60vw, calc(100vh - 21rem))",
+          height: "min(60vh, 60vw, calc(100vh - 21rem))",
         }}
       >
         <div
@@ -91,7 +99,9 @@ export default function ClockView() {
 
       {/* spec 3.3.1: 풀스크린 중엔 시계 자체만 남기고, 모드 전환 버튼 같은
           옵션성 컨트롤은 숨긴다. 우측 정렬 + 기존보다 큼직한 패딩/글자
-          크기로 더 잘 보이게 한다(터치 타깃은 여전히 40px 이상). */}
+          크기로 더 잘 보이게 한다(터치 타깃은 여전히 40px 이상).
+          풀스크린 토글은 spec 3.4.3에 따라 이 줄과 무관하게 항상
+          화면 우측 상단 코너에 별도로 고정된다. */}
       {!isFullscreen && (
         <div className="flex w-full justify-end">
           <Button

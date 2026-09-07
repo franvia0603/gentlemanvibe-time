@@ -119,7 +119,16 @@ function AdBannerInner() {
   );
 }
 
-export default function AdBanner() {
+type AdBannerProps = {
+  /**
+   * spec 3.4.5(Clock 페이지 한정): 시계~버튼줄~광고 배너를 촘촘하게
+   * 붙이기 위한 좁은 상단 여백. 기본값(false)은 다른 모든 페이지의
+   * 기존 mt-4를 그대로 유지한다 — Clock 페이지에서만 명시적으로 켠다.
+   */
+  compact?: boolean;
+};
+
+export default function AdBanner({ compact = false }: AdBannerProps) {
   const pathname = usePathname();
   const isFullscreen = useIsFullscreen();
 
@@ -128,7 +137,7 @@ export default function AdBanner() {
   }
 
   return (
-    <div className="mt-4 w-full max-w-3xl">
+    <div className={`${compact ? "mt-2" : "mt-4"} w-full max-w-3xl`}>
       <AdBannerInner key={pathname} />
     </div>
   );
