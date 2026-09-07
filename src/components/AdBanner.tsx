@@ -45,26 +45,60 @@ interface WindowWithAdsbygoogle extends Window {
  * 막아주는 것이지, 이 StrictMode 이중 호출까지는 막지 못한다. cleanup
  * 에서 리셋하지 않는 ref로 "이미 push했는지"를 기억해두면, 같은 마운트
  * 사이클의 두 번째 호출은 조용히 스킵된다.
+ *
+ * IntersectionObserver로 지연 초기화(성능 개선, 프로덕션 Lighthouse
+ * 재감사 후 추가): push({})를 호출하는 순간 adsbygoogle가 Funding
+ * Choices(동의 메시지), sodar(광고 품질 검증) 등 무거운 서드파티
+ * 스크립트를 추가로 끌어오는 게 실측으로 확인됐다 — 이 배너는 모든
+ * 페이지에서 이미 스크롤해야 보이는 위치(도구 패널 아래)에 있는데도
+ * 마운트되자마자 즉시 push하고 있어서, 이 무거운 로드가 정작 중요한
+ * 초기 화면(다이얼, 시작 버튼 등)의 하이드레이션과 메인 스레드를
+ * 두고 경쟁하고 있었다. <ins>가 뷰포트 300px 이내로 들어올 때만
+ * push하도록 미루면, 광고 자체의 지연 로딩(spec 요구사항이던 반응형
+ * 배치와는 무관)과 별개로 이 서드파티 부하 전체가 실제로 스크롤해서
+ * 볼 때까지 미뤄진다.
  */
 function AdBannerInner() {
   const hasPushedRef = useRef(false);
+  const insRef = useRef<HTMLModElement>(null);
 
   useEffect(() => {
-    if (hasPushedRef.current) return;
-    hasPushedRef.current = true;
-    try {
-      const w = window as WindowWithAdsbygoogle;
-      (w.adsbygoogle = w.adsbygoogle || []).push({});
-    } catch {
-      // adsbygoogle.js가 아직 로드되지 않았거나(afterInteractive라
-      // 타이밍이 보장되지 않음) 광고 차단기로 막힌 경우 — 조용히
-      // 무시한다. 이 배너는 부가 요소라 페이지 기능에 영향이 없어야
-      // 한다.
+    const push = () => {
+      if (hasPushedRef.current) return;
+      hasPushedRef.current = true;
+      try {
+        const w = window as WindowWithAdsbygoogle;
+        (w.adsbygoogle = w.adsbygoogle || []).push({});
+      } catch {
+        // adsbygoogle.js가 아직 로드되지 않았거나(afterInteractive라
+        // 타이밍이 보장되지 않음) 광고 차단기로 막힌 경우 — 조용히
+        // 무시한다. 이 배너는 부가 요소라 페이지 기능에 영향이 없어야
+        // 한다.
+      }
+    };
+
+    const el = insRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") {
+      push();
+      return;
     }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          push();
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "300px" },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   return (
     <ins
+      ref={insRef}
       className="adsbygoogle"
       style={{ display: "block" }}
       data-ad-client="ca-pub-5218488202760893"
