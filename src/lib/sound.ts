@@ -233,8 +233,15 @@ export function getAlarmPresetOptions() {
   return SOUND_PRESETS.map(({ id, label }) => ({ id, label }));
 }
 
-/** 지정한 프리셋을 즉시 미리듣기 재생한다(테스트 버튼용). */
+/**
+ * 지정한 프리셋을 즉시 미리듣기 재생한다(테스트 버튼용 + 실제 완료음
+ * 둘 다 이 함수를 거친다). 알람 무음 토글이 켜져 있으면 테스트
+ * 버튼을 눌러도 아무 소리가 나지 않는다 — 뮤트는 "이 소리 카테고리
+ * 자체를 끈다"는 의미라, 완료음과 미리듣기를 굳이 구분하지 않는다
+ * (백색소음 재생 여부와는 완전히 별개 토글).
+ */
 export function playAlarmPreset(presetId: AlarmPresetId) {
+  if (useSoundSettingsStore.getState().alarmMuted) return;
   const ctx = getAudioContext();
   if (!ctx) return;
   const preset = SOUND_PRESETS.find((p) => p.id === presetId);

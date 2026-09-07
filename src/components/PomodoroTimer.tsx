@@ -5,6 +5,7 @@ import SegmentDial from "@/components/SegmentDial";
 import Button from "@/components/ui/Button";
 import IconButton from "@/components/ui/IconButton";
 import AlarmSoundPicker from "@/components/AlarmSoundPicker";
+import AlarmMuteToggle from "@/components/AlarmMuteToggle";
 import { usePomodoroTicker } from "@/hooks/usePomodoroTicker";
 import { usePomodoroStore } from "@/store/usePomodoroStore";
 import { useIsFullscreen } from "@/hooks/useIsFullscreen";
@@ -105,6 +106,8 @@ export default function PomodoroTimer() {
           버튼과 분 설정 스테퍼 같은 옵션성 컨트롤은 숨긴다. */}
       {!isFullscreen && (
         <>
+          {/* 무음 토글은 설정 안에 숨기지 않고 시작/리셋 바로 옆에 둬서
+              항상 눈에 띄고 한 번의 클릭으로 접근 가능하게 한다. */}
           <div className="flex items-center gap-4">
             <Button tone="timer-red" active onClick={isRunning ? pause : start}>
               {isRunning ? "일시정지" : "시작"}
@@ -112,6 +115,7 @@ export default function PomodoroTimer() {
             <Button tone="timer-red" onClick={reset}>
               리셋
             </Button>
+            <AlarmMuteToggle tone="timer-red" />
           </div>
 
           <div className="flex flex-col items-center gap-3 pt-2">

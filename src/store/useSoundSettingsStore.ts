@@ -9,6 +9,14 @@ interface SoundSettingsState {
   alarmPreset: AlarmPresetId;
   setAlarmPreset: (preset: AlarmPresetId) => void;
 
+  /** 타이머 완료 알림음 전용 무음 토글(백색소음과는 무관). 켜져 있으면
+   * 실제 완료 시점의 알림음뿐 아니라 "테스트" 미리듣기도 재생되지
+   * 않는다 — 뮤트가 "이 소리 카테고리를 완전히 끈다"는 의미이므로
+   * 둘 다 같은 진입점(playAlarmPreset)에서 한 번에 막는다. */
+  alarmMuted: boolean;
+  setAlarmMuted: (muted: boolean) => void;
+  toggleAlarmMuted: () => void;
+
   /** 백색소음 선택 트랙과 볼륨. 실제 재생 여부(isPlaying)는 브라우저의
    * 자동재생 정책 때문에 사용자 제스처 없이 복원할 수 없어 저장하지
    * 않는다 — 트랙/볼륨만 기억해두고, 재생은 항상 사용자가 다시 눌러야
@@ -24,6 +32,10 @@ export const useSoundSettingsStore = create<SoundSettingsState>()(
     (set) => ({
       alarmPreset: "soft-bell",
       setAlarmPreset: (alarmPreset) => set({ alarmPreset }),
+
+      alarmMuted: false,
+      setAlarmMuted: (alarmMuted) => set({ alarmMuted }),
+      toggleAlarmMuted: () => set((s) => ({ alarmMuted: !s.alarmMuted })),
 
       whiteNoiseTrack: "rain",
       whiteNoiseVolume: 0.5,

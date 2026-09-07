@@ -10,6 +10,7 @@ import {
   useCountdownTimerStore,
 } from "@/store/useCountdownTimerStore";
 import AlarmSoundPicker from "@/components/AlarmSoundPicker";
+import AlarmMuteToggle from "@/components/AlarmMuteToggle";
 import { useIsFullscreen } from "@/hooks/useIsFullscreen";
 
 type RamenPreset = {
@@ -265,7 +266,9 @@ export default function CountdownTimer() {
             />
           </div>
 
-          {/* 3. 시작/리셋 — 시간 설정 바로 아래로 붙여 조작 동선을 짧게 */}
+          {/* 3. 시작/리셋 — 시간 설정 바로 아래로 붙여 조작 동선을 짧게.
+              무음 토글은 설정 안에 숨기지 않고 바로 옆에 둬서 항상
+              눈에 띄고 한 번의 클릭으로 접근 가능하게 한다. */}
           <div className="flex items-center gap-4">
             <Button active onClick={isRunning ? pause : start}>
               {isRunning ? "일시정지" : "시작"}
@@ -273,6 +276,7 @@ export default function CountdownTimer() {
             <Button onClick={reset} disabled={isRunning}>
               리셋
             </Button>
+            <AlarmMuteToggle tone="amber" />
           </div>
 
           {/* 4. 라면 조리시간 프리셋 그리드 (+ 최근 사용) */}
