@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
@@ -89,6 +90,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* 애드센스 심사/연동용 전역 스크립트(섹션 8 참고) — 계정 전체를
+            검증하는 스크립트라 특정 페이지가 아니라 모든 페이지의
+            <head>에 항상 실려 있어야 한다. 실제 광고 슬롯 삽입은
+            심사 통과 후 별도로 진행한다. */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5218488202760893"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+      </head>
       <body className={`${inter.variable} font-sans antialiased`}>
         <script
           type="application/ld+json"
