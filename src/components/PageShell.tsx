@@ -1,7 +1,12 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 type PageShellProps = {
   children: ReactNode;
+  /** 배경색 등을 페이지별로 덮어써야 할 때(예: Clock의 시간대별
+   * 무드톤, spec 5.0.4) 쓰는 선택적 인라인 스타일 오버라이드 —
+   * paddingTop 뒤에 병합되므로 backgroundColor/transition/CSS
+   * 커스텀 프로퍼티 등을 자유롭게 얹을 수 있다. */
+  style?: CSSProperties;
 };
 
 /**
@@ -19,11 +24,14 @@ type PageShellProps = {
  * 겹치는 문제 자체가 구조적으로 발생하지 않는다 — 하단 여백은 시각적
  * 여유분 정도만 둔다.
  */
-export default function PageShell({ children }: PageShellProps) {
+export default function PageShell({ children, style }: PageShellProps) {
   return (
     <main
       className="flex min-h-screen flex-col items-center justify-center bg-gv-matte-black px-8 pb-8"
-      style={{ paddingTop: "calc(var(--gv-header-height, 124px) + 8px)" }}
+      style={{
+        paddingTop: "calc(var(--gv-header-height, 124px) + 8px)",
+        ...style,
+      }}
     >
       {children}
     </main>

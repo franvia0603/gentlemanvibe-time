@@ -1,11 +1,23 @@
+import dynamic from "next/dynamic";
 import PomodoroTimer from "@/components/PomodoroTimer";
 import FullscreenHint from "@/components/FullscreenHint";
 import AdBanner from "@/components/AdBanner";
 import PageShell from "@/components/PageShell";
-import UsageGuide from "@/components/UsageGuide";
-import TimeStoriesWidget from "@/components/TimeStoriesWidget";
-import WhiteNoiseControls from "@/components/WhiteNoiseControls";
-import ShareButtons from "@/components/ShareButtons";
+
+// 스크롤해야 보이는 아래쪽 섹션들은 초기 번들에서 분리해 지연
+// 로딩한다 — 하이드레이션 비용이 첫 화면(다이얼+시작/리셋)과 경쟁하지
+// 않도록 하기 위함(Lighthouse TBT 개선). UsageGuide는 페이지의 SEO
+// 핵심 h1을 담고 있어서 ssr을 끄면 안 된다 — next/dynamic 기본값(ssr
+// 켜짐)을 그대로 쓰면 서버 렌더 HTML엔 그대로 남고, 클라이언트에서만
+// 별도 청크로 나뉘어 로드된다.
+const UsageGuide = dynamic(() => import("@/components/UsageGuide"));
+const TimeStoriesWidget = dynamic(
+  () => import("@/components/TimeStoriesWidget"),
+);
+const WhiteNoiseControls = dynamic(
+  () => import("@/components/WhiteNoiseControls"),
+);
+const ShareButtons = dynamic(() => import("@/components/ShareButtons"));
 
 /**
  * spec 3.4.1: 기본 랜딩 페이지가 Clock에서 Focus로 바뀌면서, "/"와

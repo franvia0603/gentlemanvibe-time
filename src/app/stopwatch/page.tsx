@@ -1,11 +1,18 @@
+import dynamic from "next/dynamic";
 import Stopwatch from "@/components/Stopwatch";
 import FullscreenHint from "@/components/FullscreenHint";
 import AdBanner from "@/components/AdBanner";
 import PageShell from "@/components/PageShell";
-import UsageGuide from "@/components/UsageGuide";
-import TimeStoriesWidget from "@/components/TimeStoriesWidget";
-import ShareButtons from "@/components/ShareButtons";
 import { buildMetadata } from "@/lib/seo";
+
+// 스크롤해야 보이는 아래쪽 섹션들은 초기 번들에서 분리해 지연
+// 로딩한다(Lighthouse TBT 개선) — UsageGuide는 SEO 핵심 h1을 담고
+// 있어서 ssr은 기본값(켜짐) 그대로 둔다.
+const UsageGuide = dynamic(() => import("@/components/UsageGuide"));
+const TimeStoriesWidget = dynamic(
+  () => import("@/components/TimeStoriesWidget"),
+);
+const ShareButtons = dynamic(() => import("@/components/ShareButtons"));
 
 export const metadata = buildMetadata({
   title: "Stopwatch — GentlemanVibe Time",

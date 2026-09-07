@@ -1,10 +1,16 @@
+import dynamic from "next/dynamic";
 import CountdownTimer from "@/components/CountdownTimer";
 import FullscreenHint from "@/components/FullscreenHint";
 import AdBanner from "@/components/AdBanner";
 import PageShell from "@/components/PageShell";
-import TimeStoriesWidget from "@/components/TimeStoriesWidget";
-import ShareButtons from "@/components/ShareButtons";
 import { buildMetadata } from "@/lib/seo";
+
+// 스크롤해야 보이는 아래쪽 섹션들은 초기 번들에서 분리해 지연
+// 로딩한다(Lighthouse TBT 개선).
+const TimeStoriesWidget = dynamic(
+  () => import("@/components/TimeStoriesWidget"),
+);
+const ShareButtons = dynamic(() => import("@/components/ShareButtons"));
 
 export const metadata = buildMetadata({
   title: "Timer — GentlemanVibe Time",

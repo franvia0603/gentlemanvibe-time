@@ -1,10 +1,14 @@
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import StaticPageShell from "@/components/StaticPageShell";
 import AdBanner from "@/components/AdBanner";
-import ShareButtons from "@/components/ShareButtons";
 import { GUIDE_ARTICLES, getGuideArticle } from "@/lib/guideArticles";
 import { buildMetadata } from "@/lib/seo";
+
+// 공유 버튼은 글 본문 아래(스크롤해야 보이는 위치)라 초기 번들에서
+// 분리해 지연 로딩한다(Lighthouse TBT 개선).
+const ShareButtons = dynamic(() => import("@/components/ShareButtons"));
 
 type GuideArticlePageProps = {
   params: { slug: string };

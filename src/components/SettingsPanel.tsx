@@ -63,10 +63,14 @@ export default function SettingsPanel() {
   const hideSeconds = useClockSettingsStore((s) => s.hideSeconds);
   const showDate = useClockSettingsStore((s) => s.showDate);
   const showWeather = useClockSettingsStore((s) => s.showWeather);
+  const moodToneEnabled = useClockSettingsStore((s) => s.moodToneEnabled);
   const setAmPm = useClockSettingsStore((s) => s.setAmPm);
   const setHideSeconds = useClockSettingsStore((s) => s.setHideSeconds);
   const setShowDate = useClockSettingsStore((s) => s.setShowDate);
   const setShowWeather = useClockSettingsStore((s) => s.setShowWeather);
+  const setMoodToneEnabled = useClockSettingsStore(
+    (s) => s.setMoodToneEnabled,
+  );
 
   useEffect(() => {
     useClockSettingsStore.persist.rehydrate();
@@ -112,6 +116,11 @@ export default function SettingsPanel() {
             label="날씨 표시"
             checked={showWeather}
             onChange={setShowWeather}
+          />
+          <ToggleRow
+            label="시간대별 무드톤"
+            checked={moodToneEnabled}
+            onChange={setMoodToneEnabled}
           />
         </div>
       )}

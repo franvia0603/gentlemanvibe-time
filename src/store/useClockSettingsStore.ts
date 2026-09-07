@@ -14,12 +14,15 @@ interface ClockSettingsState {
   showWeather: boolean;
   /** 홈 화면 클락 표시 모드 (디지털/아날로그) */
   clockMode: ClockMode;
+  /** 시간대별 무드톤 자동 변화 on/off (spec 5.0.4). 기본 켜짐. */
+  moodToneEnabled: boolean;
 
   setAmPm: (value: boolean) => void;
   setHideSeconds: (value: boolean) => void;
   setShowDate: (value: boolean) => void;
   setShowWeather: (value: boolean) => void;
   setClockMode: (value: ClockMode) => void;
+  setMoodToneEnabled: (value: boolean) => void;
 }
 
 export const useClockSettingsStore = create<ClockSettingsState>()(
@@ -30,12 +33,14 @@ export const useClockSettingsStore = create<ClockSettingsState>()(
       showDate: false,
       showWeather: false,
       clockMode: "digital",
+      moodToneEnabled: true,
 
       setAmPm: (value) => set({ amPm: value }),
       setHideSeconds: (value) => set({ hideSeconds: value }),
       setShowDate: (value) => set({ showDate: value }),
       setShowWeather: (value) => set({ showWeather: value }),
       setClockMode: (value) => set({ clockMode: value }),
+      setMoodToneEnabled: (value) => set({ moodToneEnabled: value }),
     }),
     {
       name: "gv-clock-display-settings",
@@ -48,6 +53,7 @@ export const useClockSettingsStore = create<ClockSettingsState>()(
         showDate: state.showDate,
         showWeather: state.showWeather,
         clockMode: state.clockMode,
+        moodToneEnabled: state.moodToneEnabled,
       }),
     },
   ),

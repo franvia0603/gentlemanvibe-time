@@ -1,13 +1,22 @@
+import dynamic from "next/dynamic";
 import ClockView from "@/components/ClockView";
 import FullscreenHint from "@/components/FullscreenHint";
 import AdBanner from "@/components/AdBanner";
 import SettingsPanel from "@/components/SettingsPanel";
-import PageShell from "@/components/PageShell";
-import UsageGuide from "@/components/UsageGuide";
-import TimeStoriesWidget from "@/components/TimeStoriesWidget";
-import WhiteNoiseControls from "@/components/WhiteNoiseControls";
-import ShareButtons from "@/components/ShareButtons";
+import ClockPageShell from "@/components/ClockPageShell";
 import { buildMetadata } from "@/lib/seo";
+
+// 스크롤해야 보이는 아래쪽 섹션들은 초기 번들에서 분리해 지연
+// 로딩한다(Lighthouse TBT 개선) — UsageGuide는 SEO 핵심 h1을 담고
+// 있어서 ssr은 기본값(켜짐) 그대로 둔다.
+const UsageGuide = dynamic(() => import("@/components/UsageGuide"));
+const TimeStoriesWidget = dynamic(
+  () => import("@/components/TimeStoriesWidget"),
+);
+const WhiteNoiseControls = dynamic(
+  () => import("@/components/WhiteNoiseControls"),
+);
+const ShareButtons = dynamic(() => import("@/components/ShareButtons"));
 
 // spec 3.4.1: 기본 랜딩 페이지가 Focus로 바뀌면서 Clock 콘텐츠는
 // "/"에서 이 라우트로 이동했다. 메타데이터도 그대로 옮겨왔다.
@@ -20,7 +29,7 @@ export const metadata = buildMetadata({
 
 export default function ClockPage() {
   return (
-    <PageShell>
+    <ClockPageShell>
       <SettingsPanel />
       <ClockView />
       {/* Clock 페이지 전용 순서(재배치 요청): 날짜·시계·전환 버튼
@@ -41,6 +50,6 @@ export default function ClockPage() {
           겹치지 않도록, 백색소음 컨트롤은 그보다 아래(부가 옵션 영역)에 둔다. */}
       <WhiteNoiseControls tone="amber" />
       <ShareButtons title="Clock — GentlemanVibe Time" />
-    </PageShell>
+    </ClockPageShell>
   );
 }

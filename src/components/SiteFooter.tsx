@@ -31,6 +31,17 @@ export default function SiteFooter() {
       <p className="text-xs font-normal text-gv-titanium">
         © 2026 GentlemanVibe. All rights reserved.
       </p>
+      {/* 상단 헤더의 로고 링크(BrandHeader)와는 별개로, 페이지 끝까지
+          스크롤한 방문자도 메인 사이트로 갈 수 있게 푸터에도 작고
+          미니멀한 텍스트 링크를 둔다. */}
+      <a
+        href="https://www.gentlemanvibe.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-1 inline-block text-xs font-normal text-gv-titanium transition-colors hover:text-gv-beige"
+      >
+        GentlemanVibe 메인 사이트 방문하기
+      </a>
       <nav
         aria-label="정책 링크"
         className="mt-1 flex flex-wrap items-center justify-center gap-x-4 gap-y-1"
