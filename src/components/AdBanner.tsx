@@ -90,7 +90,13 @@ function AdBannerInner() {
           observer.disconnect();
         }
       },
-      { rootMargin: "300px" },
+      // rootMargin 없음(0px) — 실제로 화면에 보이기 시작할 때만
+      // push한다. 처음엔 300px 여유를 뒀는데, 실측(Lighthouse
+      // 재감사)해보니 초기 로드 트레이스 구간 안에서 이 여유
+      // 마진만으로도 광고가 아직 스크롤하지 않은 상태에서 이미
+      // 트리거되어 TBT에 그대로 잡혔다 — 정말 뷰포트에 들어올 때까지
+      // 더 미루는 쪽이 낫다.
+      {},
     );
     observer.observe(el);
     return () => observer.disconnect();
