@@ -17,11 +17,25 @@ const TONE_HOVER_TEXT: Record<ButtonTone, string> = {
   "timer-red": "hover:text-gv-timer-red",
 };
 
+export type ButtonSize = "md" | "lg";
+
+// IconButton과 동일한 이유로 완전한 클래스 문자열을 미리 선언한다 —
+// className을 뒤에 이어붙여 px-6/px-7처럼 같은 종류의 유틸리티를
+// 덮어쓰려 하면, Tailwind가 실제로 어떤 걸 우선할지는 소스 코드상
+// 순서가 아니라 컴파일된 스타일시트의 클래스 생성 순서로 정해져
+// 신뢰할 수 없다.
+const SIZE_CLASSES: Record<ButtonSize, string> = {
+  md: "min-h-11 px-6 py-2.5 text-base",
+  lg: "min-h-11 px-7 py-3 text-lg",
+};
+
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /** 선택/강조 상태 — 테두리를 바꾸지 않고 텍스트 색만 tone으로 전환한다 (spec 5.0.1) */
   active?: boolean;
   /** 강조 색 계열: 기본 gv-amber, 뽀모도로 화면은 gv-timer-red */
   tone?: ButtonTone;
+  /** 기본 md, 더 눈에 띄어야 하는 단독 버튼(예: Clock의 모드 전환)은 lg */
+  size?: ButtonSize;
 }
 
 /**
@@ -31,6 +45,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export default function Button({
   active = false,
   tone = "amber",
+  size = "md",
   className = "",
   type = "button",
   ...props
@@ -38,9 +53,9 @@ export default function Button({
   return (
     <button
       type={type}
-      className={`rounded-full border border-gv-titanium/25 bg-gv-charcoal/70 px-6 py-2.5 text-base font-normal tracking-wide transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
-        active ? TONE_TEXT[tone] : "text-gv-beige"
-      } ${TONE_HOVER_TEXT[tone]} ${className}`}
+      className={`rounded-full border border-gv-titanium/25 bg-gv-charcoal/70 font-normal tracking-wide transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+        SIZE_CLASSES[size]
+      } ${active ? TONE_TEXT[tone] : "text-gv-beige"} ${TONE_HOVER_TEXT[tone]} ${className}`}
       {...props}
     />
   );

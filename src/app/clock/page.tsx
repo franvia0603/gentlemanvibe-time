@@ -23,9 +23,12 @@ export default function ClockPage() {
     <PageShell>
       <SettingsPanel />
       <ClockView />
-      <FullscreenHint featureName="디지털 클락" modeName="Clock" />
-      {/* spec 3.6: 도구 패널과 사용법 설명 섹션 사이의 광고 자리 */}
+      {/* Clock 페이지 전용 순서(재배치 요청): 날짜·시계·전환 버튼
+          바로 다음에 광고 배너, 그 뒤에 FullscreenHint/사용법 등
+          기존 콘텐츠가 이어진다 — 다른 도구 페이지(광고가 FullscreenHint
+          다음에 오는 순서)와는 의도적으로 다르다. */}
       <AdBanner />
+      <FullscreenHint featureName="디지털 클락" modeName="Clock" />
       <UsageGuide
         title="GV Clock 사용법"
         paragraphs={[

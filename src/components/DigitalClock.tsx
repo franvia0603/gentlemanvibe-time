@@ -7,8 +7,6 @@ import { useWeather, weatherLabel } from "@/hooks/useWeather";
 
 const bebasNeue = Bebas_Neue({ subsets: ["latin"], weight: "400" });
 
-const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
-
 function formatTime(date: Date, amPm: boolean, hideSeconds: boolean) {
   let hours = date.getHours();
   let suffix = "";
@@ -29,15 +27,9 @@ function formatTime(date: Date, amPm: boolean, hideSeconds: boolean) {
   return `${hh}:${mm}:${ss}${suffix}`;
 }
 
-function formatDate(date: Date) {
-  const weekday = WEEKDAYS[date.getDay()];
-  return `${date.getMonth() + 1}월 ${date.getDate()}일 (${weekday})`;
-}
-
 export default function DigitalClock() {
   const amPm = useClockSettingsStore((s) => s.amPm);
   const hideSeconds = useClockSettingsStore((s) => s.hideSeconds);
-  const showDate = useClockSettingsStore((s) => s.showDate);
   const showWeather = useClockSettingsStore((s) => s.showWeather);
 
   const weather = useWeather(showWeather);
@@ -45,7 +37,6 @@ export default function DigitalClock() {
   // 서버 렌더 시각과 클라이언트 hydration 시각이 달라 값이 어긋나는 것을 막기 위해
   // 최초 렌더는 플레이스홀더로 통일하고, 마운트 후에만 실제 시간을 채운다.
   const [display, setDisplay] = useState("--:--:--");
-  const [dateLabel, setDateLabel] = useState("");
   const frameRef = useRef<number | undefined>(undefined);
   const lastRef = useRef("");
 
@@ -61,7 +52,6 @@ export default function DigitalClock() {
       if (formatted !== lastRef.current) {
         lastRef.current = formatted;
         setDisplay(formatted);
-        setDateLabel(formatDate(now));
       }
       frameRef.current = requestAnimationFrame(tick);
     };
@@ -121,12 +111,6 @@ export default function DigitalClock() {
       >
         {display}
       </div>
-
-      {showDate && dateLabel && (
-        <div className="text-sm font-normal tracking-widest text-gv-titanium">
-          {dateLabel}
-        </div>
-      )}
     </div>
   );
 }
