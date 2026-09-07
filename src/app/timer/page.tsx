@@ -1,5 +1,6 @@
 import CountdownTimer from "@/components/CountdownTimer";
 import FullscreenHint from "@/components/FullscreenHint";
+import AdBanner from "@/components/AdBanner";
 import PageShell from "@/components/PageShell";
 import TimeStoriesWidget from "@/components/TimeStoriesWidget";
 import ShareButtons from "@/components/ShareButtons";
@@ -18,6 +19,10 @@ export default function TimerPage() {
       <h1 className="sr-only">GV Timer — 카운트다운 타이머</h1>
       <CountdownTimer />
       <FullscreenHint featureName="카운트다운 타이머" modeName="Timer" />
+      {/* spec 3.6: 도구 패널(라면 프리셋·조리 팁 포함)과 다음 콘텐츠
+          섹션 사이의 광고 자리 — 이 페이지엔 별도 UsageGuide가 없어서
+          FullscreenHint 바로 다음, TimeStoriesWidget 앞에 둔다. */}
+      <AdBanner />
       <TimeStoriesWidget />
       <ShareButtons title="Timer — GentlemanVibe Time" />
     </PageShell>

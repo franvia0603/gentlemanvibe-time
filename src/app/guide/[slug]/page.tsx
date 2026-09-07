@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import StaticPageShell from "@/components/StaticPageShell";
+import AdBanner from "@/components/AdBanner";
 import ShareButtons from "@/components/ShareButtons";
 import { GUIDE_ARTICLES, getGuideArticle } from "@/lib/guideArticles";
 import { buildMetadata } from "@/lib/seo";
@@ -59,6 +60,8 @@ export default function GuideArticlePage({ params }: GuideArticlePageProps) {
       ) : (
         <p>이 글은 아직 준비 중입니다. 곧 채워질 예정이니 조금만 기다려 주세요.</p>
       )}
+      {/* spec 3.6: 글 본문과 다음 콘텐츠(공유하기) 사이의 광고 자리 */}
+      <AdBanner />
       <ShareButtons title={`${article.title} — GentlemanVibe Time`} />
     </StaticPageShell>
   );

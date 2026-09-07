@@ -1,5 +1,6 @@
 import PomodoroTimer from "@/components/PomodoroTimer";
 import FullscreenHint from "@/components/FullscreenHint";
+import AdBanner from "@/components/AdBanner";
 import PageShell from "@/components/PageShell";
 import UsageGuide from "@/components/UsageGuide";
 import TimeStoriesWidget from "@/components/TimeStoriesWidget";
@@ -16,6 +17,8 @@ export default function FocusPage() {
     <PageShell>
       <PomodoroTimer />
       <FullscreenHint featureName="뽀모도로 타이머" modeName="Focus" />
+      {/* spec 3.6: 도구 패널과 사용법 설명 섹션 사이의 광고 자리 */}
+      <AdBanner />
       <UsageGuide
         title="GV Focus 사용법"
         paragraphs={[

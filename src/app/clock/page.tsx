@@ -1,5 +1,6 @@
 import ClockView from "@/components/ClockView";
 import FullscreenHint from "@/components/FullscreenHint";
+import AdBanner from "@/components/AdBanner";
 import SettingsPanel from "@/components/SettingsPanel";
 import PageShell from "@/components/PageShell";
 import UsageGuide from "@/components/UsageGuide";
@@ -23,6 +24,8 @@ export default function ClockPage() {
       <SettingsPanel />
       <ClockView />
       <FullscreenHint featureName="디지털 클락" modeName="Clock" />
+      {/* spec 3.6: 도구 패널과 사용법 설명 섹션 사이의 광고 자리 */}
+      <AdBanner />
       <UsageGuide
         title="GV Clock 사용법"
         paragraphs={[

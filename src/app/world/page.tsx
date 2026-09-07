@@ -1,5 +1,6 @@
 import WorldClock from "@/components/WorldClock";
 import FullscreenHint from "@/components/FullscreenHint";
+import AdBanner from "@/components/AdBanner";
 import PageShell from "@/components/PageShell";
 import UsageGuide from "@/components/UsageGuide";
 import TimeStoriesWidget from "@/components/TimeStoriesWidget";
@@ -18,6 +19,8 @@ export default function WorldClockPage() {
     <PageShell>
       <WorldClock />
       <FullscreenHint featureName="월드 클락" modeName="World Clock" />
+      {/* spec 3.6: 도구 패널과 사용법 설명 섹션 사이의 광고 자리 */}
+      <AdBanner />
       <UsageGuide
         title="GV World Clock 사용법"
         paragraphs={[
