@@ -7,7 +7,14 @@ import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+// .trim() 방어: Vercel 대시보드 등에서 환경변수 값을 붙여넣을 때
+// 실수로 끝에 개행 문자가 함께 들어가는 사고가 실제로 있었다(예:
+// "G-XXXXXXXXXX\n"). 이 값은 GoogleAnalytics의 인라인 <script> 안에
+// 작은따옴표 문자열 리터럴로 그대로 삽입되는데, 문자열 리터럴 안에
+// 이스케이프되지 않은 실제 개행이 들어가면 SyntaxError로 그 스크립트
+// 태그 전체가 조용히 실행 실패한다 — 콘솔 에러 외에는 아무 징후도
+// 없어서 "GA4 실시간 데이터가 안 잡힌다"는 형태로만 뒤늦게 드러난다.
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID?.trim();
 
 const inter = Inter({
   subsets: ["latin"],

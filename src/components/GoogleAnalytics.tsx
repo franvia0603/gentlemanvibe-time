@@ -67,14 +67,24 @@ export default function GoogleAnalytics({ gaId }: GoogleAnalyticsProps) {
     <>
       <Script
         strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+        src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(gaId)}`}
       />
+      {/*
+        JSON.stringify로 gaId를 안전하게 이스케이프해서 넣는다 —
+        환경변수 값에 개행이나 따옴표가 섞여 들어와도(실제로 겪은
+        사고: 끝에 실제 개행 문자가 붙어 들어온 적이 있다) 이 인라인
+        스크립트 자체가 SyntaxError로 통째로 죽는 일이 없도록 하기
+        위함이다. 그런 사고가 나면 window.gtag가 아예 정의되지 않아
+        페이지뷰가 하나도 수집되지 않는데, 에러가 콘솔에만 찍히고
+        화면상으로는 아무 징후가 없어 뒤늦게 "실시간 데이터가 안
+        잡힌다"는 형태로만 드러난다.
+      */}
       <Script id="google-analytics-init" strategy="afterInteractive">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', '${gaId}');
+          gtag('config', ${JSON.stringify(gaId)});
         `}
       </Script>
     </>
