@@ -9,7 +9,7 @@ import {
   type CountdownOnComplete,
   useCountdownTimerStore,
 } from "@/store/useCountdownTimerStore";
-import { playCompletionTone } from "@/lib/sound";
+import AlarmSoundPicker from "@/components/AlarmSoundPicker";
 import { useIsFullscreen } from "@/hooks/useIsFullscreen";
 
 type RamenPreset = {
@@ -334,7 +334,7 @@ export default function CountdownTimer() {
             </div>
           </div>
 
-          <Button onClick={playCompletionTone}>종료음 테스트</Button>
+          <AlarmSoundPicker tone="amber" />
         </>
       )}
     </div>

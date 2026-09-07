@@ -4,6 +4,7 @@ import SettingsPanel from "@/components/SettingsPanel";
 import PageShell from "@/components/PageShell";
 import UsageGuide from "@/components/UsageGuide";
 import TimeStoriesWidget from "@/components/TimeStoriesWidget";
+import WhiteNoiseControls from "@/components/WhiteNoiseControls";
 import ShareButtons from "@/components/ShareButtons";
 import { buildMetadata } from "@/lib/seo";
 
@@ -30,6 +31,9 @@ export default function ClockPage() {
         ]}
       />
       <TimeStoriesWidget />
+      {/* spec 3.6의 광고 슬롯 예정 자리(도구 패널↔사용법 설명 섹션 사이)와
+          겹치지 않도록, 백색소음 컨트롤은 그보다 아래(부가 옵션 영역)에 둔다. */}
+      <WhiteNoiseControls tone="amber" />
       <ShareButtons title="Clock — GentlemanVibe Time" />
     </PageShell>
   );

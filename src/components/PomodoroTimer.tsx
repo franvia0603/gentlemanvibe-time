@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import SegmentDial from "@/components/SegmentDial";
 import Button from "@/components/ui/Button";
 import IconButton from "@/components/ui/IconButton";
+import AlarmSoundPicker from "@/components/AlarmSoundPicker";
 import { usePomodoroTicker } from "@/hooks/usePomodoroTicker";
 import { usePomodoroStore } from "@/store/usePomodoroStore";
 import { useIsFullscreen } from "@/hooks/useIsFullscreen";
@@ -127,6 +128,8 @@ export default function PomodoroTimer() {
               onChange={setBreakMinutes}
             />
           </div>
+
+          <AlarmSoundPicker tone="timer-red" />
         </>
       )}
     </div>

@@ -3,6 +3,7 @@ import FullscreenHint from "@/components/FullscreenHint";
 import PageShell from "@/components/PageShell";
 import UsageGuide from "@/components/UsageGuide";
 import TimeStoriesWidget from "@/components/TimeStoriesWidget";
+import WhiteNoiseControls from "@/components/WhiteNoiseControls";
 import ShareButtons from "@/components/ShareButtons";
 
 /**
@@ -23,6 +24,9 @@ export default function FocusPage() {
         ]}
       />
       <TimeStoriesWidget />
+      {/* spec 3.6의 광고 슬롯 예정 자리(도구 패널↔사용법 설명 섹션 사이)와
+          겹치지 않도록, 백색소음 컨트롤은 그보다 아래(부가 옵션 영역)에 둔다. */}
+      <WhiteNoiseControls tone="timer-red" />
       <ShareButtons title="GV Focus 뽀모도로 타이머 — GentlemanVibe Time" />
     </PageShell>
   );

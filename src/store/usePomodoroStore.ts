@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { playCompletionTone } from "@/lib/sound";
 
 export type PomodoroMode = "focus" | "break";
 
@@ -92,6 +93,7 @@ export const usePomodoroStore = create<PomodoroState>()(
       },
 
       completeSession: () => {
+        playCompletionTone();
         const { mode, focusMinutes, breakMinutes } = get();
         const nextMode: PomodoroMode = mode === "focus" ? "break" : "focus";
         const nextDuration = durationSeconds(

@@ -4,6 +4,7 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import WhiteNoiseEngine from "@/components/WhiteNoiseEngine";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
@@ -95,6 +96,7 @@ export default function RootLayout({
         />
         {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
         <ServiceWorkerRegister />
+        <WhiteNoiseEngine />
         <SiteHeader />
         {children}
         <SiteFooter />
