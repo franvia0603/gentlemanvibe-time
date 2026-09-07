@@ -77,13 +77,15 @@ export default function SettingsPanel() {
   }
 
   return (
-    // 모바일(spec 3.4.3): 헤더가 좌-햄버거/중앙-로고/우-풀스크린토글
-    // 3분할 그리드로 바뀌면서 토글이 화면 우측 끝 구석으로 이동했다.
-    // 이 톱니바퀴는 헤더 밖에서 fixed로 독립 배치되는 오버레이라
-    // 고정 좌표(top-4)가 새 토글 위치(위에서 약 47px)와 어긋나
-    // 겹쳐 보였다 — 모바일에서만 토글과 같은 줄에 정렬되도록 보정한다.
-    // 데스크톱/태블릿은 기존 좌표를 그대로 유지한다.
-    <div className="fixed right-16 top-[45px] z-50 md:right-14 md:top-4">
+    // spec 3.4.3 재수정: 풀스크린 토글이 이제 뷰포트 크기와 무관하게
+    // 항상 우측 상단 구석(right-3, top: 44px + safe-area)에 고정된다
+    // — 이 톱니바퀴도 같은 top 공식을 써서 모바일/태블릿/데스크톱
+    // 전부에서 토글과 같은 줄에 정렬되고, 토글의 40px 폭 + 여백만큼
+    // 왼쪽으로 띄워 겹치지 않게 한다(분기 없이 하나의 위치로 통일).
+    <div
+      className="fixed right-16 z-50"
+      style={{ top: "calc(44px + env(safe-area-inset-top))" }}
+    >
       <IconButton
         onClick={() => setOpen((value) => !value)}
         aria-label="클락 표시 설정"

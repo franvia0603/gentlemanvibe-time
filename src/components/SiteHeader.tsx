@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import BrandHeader from "@/components/BrandHeader";
 import ModeNav, { MobileNavMenu } from "@/components/ModeNav";
 import FullscreenToggle from "@/components/FullscreenToggle";
-import { useIsFullscreen } from "@/hooks/useIsFullscreen";
 
 /**
  * BrandHeader/ModeNav를 감싸는 단일 fixed 상단 바.
@@ -14,9 +13,9 @@ import { useIsFullscreen } from "@/hooks/useIsFullscreen";
  * 바로 통합해 스크롤되는 콘텐츠가 그 뒤로 자연스럽게 지나가도록 한다
  * (표준적인 고정 헤더 동작).
  *
- * 풀스크린 토글은 ModeNav 좌측에 단일하게 배치한다(spec 3.4). ModeNav는
- * 풀스크린 중 스스로 숨지만 토글은 계속 보여야 하므로, ModeNav가 사라진
- * 자리에서 토글만 남았을 때는 가운데로 재정렬한다.
+ * 풀스크린 토글의 위치는 spec 3.4.3(재수정)에서 별도로 정의한다 — 이
+ * 헤더 컴포넌트가 렌더링하지만, 토글 자신이 독립적으로 화면 우측 상단에
+ * fixed 배치되므로 이 헤더의 폭/높이 흐름과는 무관하다.
  *
  * 헤더 높이는 여전히 ResizeObserver로 측정해 `--gv-header-height` CSS
  * 변수에 반영한다(spec 6) — 모바일 햄버거 메뉴가 펼쳐지면 그만큼 헤더가
@@ -40,14 +39,15 @@ import { useIsFullscreen } from "@/hooks/useIsFullscreen";
  * 화면 최상단에서 충분히 떨어지도록 보장한다. 이 여백은 헤더 컨테이너
  * 전체의 padding-top이라 풀스크린/일반 모드 양쪽에 동일하게 적용된다.
  *
- * spec 3.4.3: 모바일(햄버거 전환 뷰포트)에서는 햄버거 메뉴와 풀스크린
- * 토글이 한 줄에 나란히 좌측 클러스터로 몰려 있어 위치가 애매하게
- * 겹쳐 보였다 — 좌측 구석에 햄버거, 우측 구석에 풀스크린 토글, 그
- * 사이 중앙에 로고를 두는 3분할 그리드로 재배치한다. 데스크톱/태블릿은
- * 기존의 로고-상단 + 토글/네비 한 줄 구조를 그대로 유지한다.
+ * spec 3.4.3 (재수정): 풀스크린 토글은 이제 뷰포트 크기와 무관하게
+ * 항상 화면 우측 상단 구석에 있어야 한다. FullscreenToggle 컴포넌트
+ * 자체가 `fixed`로 독립적인 코너 오버레이가 되었으므로, 이 헤더의
+ * 그리드/flex 흐름에는 더 이상 포함시키지 않는다 — 모바일 3분할
+ * 그리드의 우측 칸은 로고를 가운데 정렬시키기 위한 빈 자리로만
+ * 남겨두고(실제 토글은 그 위에 겹쳐서 독립적으로 그려진다), 데스크톱/
+ * 태블릿의 nav 탭 줄에서도 토글을 완전히 뺐다.
  */
 export default function SiteHeader() {
-  const isFullscreen = useIsFullscreen();
   const headerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -68,36 +68,37 @@ export default function SiteHeader() {
   }, []);
 
   return (
-    <div
-      ref={headerRef}
-      className="fixed inset-x-0 top-0 z-50 flex flex-col items-center gap-1 border-b border-gv-titanium/10 bg-gv-matte-black pb-3"
-      style={{ paddingTop: "calc(44px + env(safe-area-inset-top))" }}
-    >
-      {/* 모바일 전용 3분할 헤더(spec 3.4.3): 좌-햄버거 / 중앙-로고 / 우-토글 */}
-      <div className="grid w-full grid-cols-3 items-center px-3 md:hidden">
-        <div className="flex justify-start">
-          <MobileNavMenu />
-        </div>
-        <div className="flex justify-center">
-          <BrandHeader />
-        </div>
-        <div className="flex justify-end">
-          <FullscreenToggle />
-        </div>
-      </div>
+    <>
+      {/* 풀스크린 토글: 헤더 흐름 밖에서 독립적으로 우측 상단에 고정
+          렌더링된다(spec 3.4.3 재수정) — 모바일/태블릿/데스크톱 모두
+          이 하나의 인스턴스가 담당한다. */}
+      <FullscreenToggle />
 
-      {/* 데스크톱/태블릿: 기존 구조(로고 위, 토글+네비 한 줄 아래) 그대로 유지 */}
-      <div className="hidden flex-col items-center gap-1 md:flex">
-        <BrandHeader />
-        {isFullscreen ? (
-          <FullscreenToggle />
-        ) : (
-          <div className="flex items-center gap-2">
-            <FullscreenToggle />
-            <ModeNav />
+      <div
+        ref={headerRef}
+        className="fixed inset-x-0 top-0 z-50 flex flex-col items-center gap-1 border-b border-gv-titanium/10 bg-gv-matte-black pb-3"
+        style={{ paddingTop: "calc(44px + env(safe-area-inset-top))" }}
+      >
+        {/* 모바일 전용 3분할 헤더(spec 3.4.3): 좌-햄버거 / 중앙-로고 / 우측은
+            빈 칸으로 남겨 로고를 가운데 정렬시킨다(토글은 위의 독립
+            오버레이가 같은 자리에 겹쳐서 그린다). */}
+        <div className="grid w-full grid-cols-3 items-center px-3 md:hidden">
+          <div className="flex justify-start">
+            <MobileNavMenu />
           </div>
-        )}
+          <div className="flex justify-center">
+            <BrandHeader />
+          </div>
+          <div aria-hidden="true" />
+        </div>
+
+        {/* 데스크톱/태블릿: 로고 위, nav 탭 줄 아래 — 토글은 더 이상 이
+            줄에 포함되지 않는다. */}
+        <div className="hidden flex-col items-center gap-1 md:flex">
+          <BrandHeader />
+          <ModeNav />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
