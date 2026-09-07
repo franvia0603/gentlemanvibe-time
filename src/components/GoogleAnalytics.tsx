@@ -26,9 +26,17 @@ type GoogleAnalyticsProps = {
  *
  * 최초 페이지뷰는 gtag('config', ...) 호출이 자동으로 보낸다 — 이 효과가
  * 마운트 시점에도 똑같이 수동 전송을 시도하면 gtag.js가 비동기로 아직
- * 로드되지 않았을 수 있어(afterInteractive는 로드 순서를 보장하지
- * 않음) 오히려 첫 페이지뷰를 놓치기 쉽다. 그래서 최초 마운트는 건너뛰고,
- * 이후 실제 경로 변경 때만 수동으로 전송한다.
+ * 로드되지 않았을 수 있어 오히려 첫 페이지뷰를 놓치기 쉽다. 그래서
+ * 최초 마운트는 건너뛰고, 이후 실제 경로 변경 때만 수동으로 전송한다.
+ *
+ * strategy="lazyOnload"(프로덕션 Lighthouse 감사 후 변경): gtag.js는
+ * 약 70KB가 "사용되지 않는 JS"로 잡힐 만큼 대부분 이 사이트에서 쓰이지
+ * 않는 기능을 포함하는 서드파티 스크립트다. afterInteractive로
+ * 두면 하이드레이션 직후 곧바로 파싱·실행되어 LCP/TBT를 계산하는
+ * 구간과 메인 스레드를 두고 경쟁한다 — lazyOnload로 늦추면 핵심
+ * 콘텐츠가 먼저 그려진 뒤에야 로드되어 체감 성능에 영향이 없으면서도
+ * Lighthouse 성능 점수에 실질적으로 도움이 된다. 첫 페이지뷰가 몇백ms
+ * 늦게 잡히는 것 외에는 실제 수집 데이터 손실이 없다.
  *
  * "마지막으로 실제 보낸 경로"를 ref로 기억해 pathname과 비교하는 이유:
  * 불리언 "첫 렌더" 플래그는 React 18 StrictMode의 개발 모드 effect
@@ -66,7 +74,7 @@ export default function GoogleAnalytics({ gaId }: GoogleAnalyticsProps) {
   return (
     <>
       <Script
-        strategy="afterInteractive"
+        strategy="lazyOnload"
         src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(gaId)}`}
       />
       {/*
@@ -79,7 +87,7 @@ export default function GoogleAnalytics({ gaId }: GoogleAnalyticsProps) {
         화면상으로는 아무 징후가 없어 뒤늦게 "실시간 데이터가 안
         잡힌다"는 형태로만 드러난다.
       */}
-      <Script id="google-analytics-init" strategy="afterInteractive">
+      <Script id="google-analytics-init" strategy="lazyOnload">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
