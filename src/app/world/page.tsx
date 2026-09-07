@@ -2,6 +2,8 @@ import dynamic from "next/dynamic";
 import WorldClock from "@/components/WorldClock";
 import FullscreenHint from "@/components/FullscreenHint";
 import AdBanner from "@/components/AdBanner";
+import PomodoroPromoBanner from "@/components/PomodoroPromoBanner";
+import GentlemanVibePromoBanner from "@/components/GentlemanVibePromoBanner";
 import PageShell from "@/components/PageShell";
 import { buildMetadata } from "@/lib/seo";
 
@@ -36,6 +38,9 @@ export default function WorldClockPage() {
         ]}
       />
       <TimeStoriesWidget />
+      {/* spec 3.4.4: 교차 홍보 배너 — 뽀모도로 바로가기 → 젠틀맨바이브 순 */}
+      <PomodoroPromoBanner />
+      <GentlemanVibePromoBanner />
       <ShareButtons title="World Clock — GentlemanVibe Time" />
     </PageShell>
   );

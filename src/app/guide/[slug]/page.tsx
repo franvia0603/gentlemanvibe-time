@@ -3,6 +3,8 @@ import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import StaticPageShell from "@/components/StaticPageShell";
 import AdBanner from "@/components/AdBanner";
+import PomodoroPromoBanner from "@/components/PomodoroPromoBanner";
+import GentlemanVibePromoBanner from "@/components/GentlemanVibePromoBanner";
 import { GUIDE_ARTICLES, getGuideArticle } from "@/lib/guideArticles";
 import { buildMetadata } from "@/lib/seo";
 
@@ -66,6 +68,9 @@ export default function GuideArticlePage({ params }: GuideArticlePageProps) {
       )}
       {/* spec 3.6: 글 본문과 다음 콘텐츠(공유하기) 사이의 광고 자리 */}
       <AdBanner />
+      {/* spec 3.4.4: 교차 홍보 배너 — 뽀모도로 바로가기 → 젠틀맨바이브 순 */}
+      <PomodoroPromoBanner />
+      <GentlemanVibePromoBanner />
       <ShareButtons title={`${article.title} — GentlemanVibe Time`} />
     </StaticPageShell>
   );

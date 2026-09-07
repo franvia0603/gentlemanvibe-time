@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import PomodoroTimer from "@/components/PomodoroTimer";
 import FullscreenHint from "@/components/FullscreenHint";
 import AdBanner from "@/components/AdBanner";
+import GentlemanVibePromoBanner from "@/components/GentlemanVibePromoBanner";
 import PageShell from "@/components/PageShell";
 
 // 스크롤해야 보이는 아래쪽 섹션들은 초기 번들에서 분리해 지연
@@ -42,6 +43,9 @@ export default function FocusPage() {
       {/* spec 3.6의 광고 슬롯 예정 자리(도구 패널↔사용법 설명 섹션 사이)와
           겹치지 않도록, 백색소음 컨트롤은 그보다 아래(부가 옵션 영역)에 둔다. */}
       <WhiteNoiseControls tone="timer-red" />
+      {/* spec 3.4.4: 배너①(뽀모도로 바로가기)은 이 페이지 자체가
+          Focus라서 제외 — 배너②(젠틀맨바이브)만 노출한다. */}
+      <GentlemanVibePromoBanner />
       <ShareButtons title="GV Focus 뽀모도로 타이머 — GentlemanVibe Time" />
     </PageShell>
   );

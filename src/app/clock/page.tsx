@@ -2,6 +2,8 @@ import dynamic from "next/dynamic";
 import ClockView from "@/components/ClockView";
 import FullscreenHint from "@/components/FullscreenHint";
 import AdBanner from "@/components/AdBanner";
+import PomodoroPromoBanner from "@/components/PomodoroPromoBanner";
+import GentlemanVibePromoBanner from "@/components/GentlemanVibePromoBanner";
 import SettingsPanel from "@/components/SettingsPanel";
 import ClockPageShell from "@/components/ClockPageShell";
 import { buildMetadata } from "@/lib/seo";
@@ -49,6 +51,9 @@ export default function ClockPage() {
       {/* spec 3.6의 광고 슬롯 예정 자리(도구 패널↔사용법 설명 섹션 사이)와
           겹치지 않도록, 백색소음 컨트롤은 그보다 아래(부가 옵션 영역)에 둔다. */}
       <WhiteNoiseControls tone="amber" />
+      {/* spec 3.4.4: 교차 홍보 배너 — 뽀모도로 바로가기 → 젠틀맨바이브 순 */}
+      <PomodoroPromoBanner />
+      <GentlemanVibePromoBanner />
       <ShareButtons title="Clock — GentlemanVibe Time" />
     </ClockPageShell>
   );
