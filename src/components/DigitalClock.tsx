@@ -36,7 +36,14 @@ export default function DigitalClock() {
 
   // 서버 렌더 시각과 클라이언트 hydration 시각이 달라 값이 어긋나는 것을 막기 위해
   // 최초 렌더는 플레이스홀더로 통일하고, 마운트 후에만 실제 시간을 채운다.
-  const [display, setDisplay] = useState("--:--:--");
+  // CLS 버그 수정: 플레이스홀더로 "--:--:--"(하이픈)를 쓰면, 실제 시간
+  // 문자열로 바뀌는 순간 폭이 달라져 큰 레이아웃 시프트가 발생했다 —
+  // 실측 Lighthouse에서 이 요소 하나가 페이지 전체 CLS(0.697)의 대부분
+  // (0.677)을 차지했다. tabular-nums는 숫자(0-9) 글리프끼리만 폭을
+  // 맞춰주고 하이픈에는 적용되지 않기 때문. 숫자 "0"으로 채운
+  // "00:00:00"은 실제 시간 문자열과 글자 구성이 동일해 폭이 정확히
+  // 일치하므로, 하이드레이션 안전성은 유지하면서 시프트를 없앤다.
+  const [display, setDisplay] = useState("00:00:00");
   const frameRef = useRef<number | undefined>(undefined);
   const lastRef = useRef("");
 

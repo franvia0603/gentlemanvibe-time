@@ -1,7 +1,6 @@
 import dynamic from "next/dynamic";
 import CountdownTimer from "@/components/CountdownTimer";
 import FullscreenHint from "@/components/FullscreenHint";
-import AdBanner from "@/components/AdBanner";
 import PomodoroPromoBanner from "@/components/PomodoroPromoBanner";
 import GentlemanVibePromoBanner from "@/components/GentlemanVibePromoBanner";
 import PageShell from "@/components/PageShell";
@@ -27,10 +26,9 @@ export default function TimerPage() {
       <h1 className="sr-only">GV Timer — 카운트다운 타이머</h1>
       <CountdownTimer />
       <FullscreenHint featureName="카운트다운 타이머" modeName="Timer" />
-      {/* spec 3.6: 도구 패널(라면 프리셋·조리 팁 포함)과 다음 콘텐츠
-          섹션 사이의 광고 자리 — 이 페이지엔 별도 UsageGuide가 없어서
-          FullscreenHint 바로 다음, TimeStoriesWidget 앞에 둔다. */}
-      <AdBanner />
+      {/* 광고 제거(10일 운영 후 레이아웃 흔들림/수익 저하 이슈로 임시
+          철수) — AdBanner 컴포넌트 자체는 재사용을 위해 남겨두고
+          호출만 뺀다. */}
       <TimeStoriesWidget />
       {/* spec 3.4.4: 교차 홍보 배너 — 뽀모도로 바로가기 → 젠틀맨바이브 순 */}
       <PomodoroPromoBanner />

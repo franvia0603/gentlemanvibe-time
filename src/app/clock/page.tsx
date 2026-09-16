@@ -1,7 +1,6 @@
 import dynamic from "next/dynamic";
 import ClockView from "@/components/ClockView";
 import FullscreenHint from "@/components/FullscreenHint";
-import AdBanner from "@/components/AdBanner";
 import PomodoroPromoBanner from "@/components/PomodoroPromoBanner";
 import GentlemanVibePromoBanner from "@/components/GentlemanVibePromoBanner";
 import SettingsPanel from "@/components/SettingsPanel";
@@ -34,13 +33,9 @@ export default function ClockPage() {
     <ClockPageShell>
       <SettingsPanel />
       <ClockView />
-      {/* Clock 페이지 전용 순서(재배치 요청): 날짜·시계·전환 버튼
-          바로 다음에 광고 배너, 그 뒤에 FullscreenHint/사용법 등
-          기존 콘텐츠가 이어진다 — 다른 도구 페이지(광고가 FullscreenHint
-          다음에 오는 순서)와는 의도적으로 다르다.
-          spec 3.4.5: 좁은 상단 여백(compact)으로 시계~버튼줄~광고
-          배너를 촘촘하게 붙인다 — 다른 페이지의 AdBanner는 그대로. */}
-      <AdBanner compact />
+      {/* 광고 제거(10일 운영 후 레이아웃 흔들림/수익 저하 이슈로 임시
+          철수) — AdBanner 컴포넌트 자체는 재사용을 위해 남겨두고
+          호출만 뺀다. */}
       <FullscreenHint featureName="디지털 클락" modeName="Clock" />
       <UsageGuide
         title="GV Clock 사용법"
@@ -50,8 +45,6 @@ export default function ClockPage() {
         ]}
       />
       <TimeStoriesWidget />
-      {/* spec 3.6의 광고 슬롯 예정 자리(도구 패널↔사용법 설명 섹션 사이)와
-          겹치지 않도록, 백색소음 컨트롤은 그보다 아래(부가 옵션 영역)에 둔다. */}
       <WhiteNoiseControls tone="amber" />
       {/* spec 3.4.4: 교차 홍보 배너 — 뽀모도로 바로가기 → 젠틀맨바이브 순 */}
       <PomodoroPromoBanner />

@@ -2,7 +2,6 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import StaticPageShell from "@/components/StaticPageShell";
-import AdBanner from "@/components/AdBanner";
 import PomodoroPromoBanner from "@/components/PomodoroPromoBanner";
 import GentlemanVibePromoBanner from "@/components/GentlemanVibePromoBanner";
 import { GUIDE_ARTICLES, getGuideArticle } from "@/lib/guideArticles";
@@ -66,8 +65,9 @@ export default function GuideArticlePage({ params }: GuideArticlePageProps) {
       ) : (
         <p>이 글은 아직 준비 중입니다. 곧 채워질 예정이니 조금만 기다려 주세요.</p>
       )}
-      {/* spec 3.6: 글 본문과 다음 콘텐츠(공유하기) 사이의 광고 자리 */}
-      <AdBanner />
+      {/* 광고 제거(10일 운영 후 레이아웃 흔들림/수익 저하 이슈로 임시
+          철수) — AdBanner 컴포넌트 자체는 재사용을 위해 남겨두고
+          호출만 뺀다. */}
       {/* spec 3.4.4: 교차 홍보 배너 — 뽀모도로 바로가기 → 젠틀맨바이브 순.
           StaticPageShell은 본문 문단 간격을 위해 자식들 사이에
           gap-4(16px)를 두는데, 이 gap이 두 배너 사이에도 그대로

@@ -90,10 +90,14 @@ function CityCard({ id, label, now, removable, onRemove }: CityCardProps) {
         </IconButton>
       )}
       <span className="text-sm font-normal text-gv-beige">{label}</span>
+      {/* CLS 버그 수정(DigitalClock과 동일한 원인): 플레이스홀더에
+          하이픈을 쓰면 tabular-nums가 적용되지 않아 실제 시간 문자열로
+          바뀔 때 폭이 달라져 도시 카드마다 레이아웃 시프트가 났다 —
+          숫자 "0"으로 채운 "00:00:00"은 폭이 정확히 일치한다. */}
       <span
         className={`${bebasNeue.className} text-3xl tabular-nums tracking-wide text-gv-amber-glow`}
       >
-        {now ? formatCityTime(now, id) : "--:--:--"}
+        {now ? formatCityTime(now, id) : "00:00:00"}
       </span>
       <span className="text-xs font-normal text-gv-titanium">
         {offsetLabel}

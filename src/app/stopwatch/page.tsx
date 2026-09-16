@@ -1,7 +1,6 @@
 import dynamic from "next/dynamic";
 import Stopwatch from "@/components/Stopwatch";
 import FullscreenHint from "@/components/FullscreenHint";
-import AdBanner from "@/components/AdBanner";
 import PomodoroPromoBanner from "@/components/PomodoroPromoBanner";
 import GentlemanVibePromoBanner from "@/components/GentlemanVibePromoBanner";
 import PageShell from "@/components/PageShell";
@@ -28,8 +27,9 @@ export default function StopwatchPage() {
     <PageShell>
       <Stopwatch />
       <FullscreenHint featureName="스톱워치" modeName="Stopwatch" />
-      {/* spec 3.6: 도구 패널과 사용법 설명 섹션 사이의 광고 자리 */}
-      <AdBanner />
+      {/* 광고 제거(10일 운영 후 레이아웃 흔들림/수익 저하 이슈로 임시
+          철수) — AdBanner 컴포넌트 자체는 재사용을 위해 남겨두고
+          호출만 뺀다. */}
       <UsageGuide
         title="GV Stopwatch 사용법"
         paragraphs={[
