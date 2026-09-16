@@ -70,13 +70,20 @@ type CityCardProps = {
 };
 
 function CityCard({ id, label, now, removable, onRemove }: CityCardProps) {
+  // CLS 버그 수정: mount 전엔 now가 null이라 이 줄이 빈 문자열이었다가,
+  // 마운트 후 실제 오프셋 문구로 바뀌면서 "내용 없음 → 내용 있음"
+  // 전환 자체가 작은 레이아웃 시프트를 유발했다(실측 Lighthouse
+  // World 페이지 CLS 0.072, 이 카드가 유일한 원인으로 지목됨). 줄
+  // 자체는 항상 내용이 있는 상태로 유지되도록 non-breaking space를
+  // 기본값으로 둔다 — 폭까지 맞출 필요는 없고, "빈 인라인 콘텐츠 →
+  // 채워진 콘텐츠"라는 전환 자체만 없애면 된다.
   const offsetLabel = now
     ? id === SEOUL_TIMEZONE
       ? "현재 위치"
       : formatOffsetLabel(
           getUtcOffsetMinutes(now, id) - getUtcOffsetMinutes(now, SEOUL_TIMEZONE),
         )
-    : "";
+    : " ";
 
   return (
     <div className="relative flex flex-col gap-1 rounded-lg border border-gv-titanium/25 bg-gv-charcoal/70 p-4">
